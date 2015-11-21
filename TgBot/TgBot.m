@@ -47,6 +47,20 @@ BotUserPrivilege[usrId_, bot_] :=
             0
         ]
     ]
+    
+
+(*Compatibility version of URLQueryEncode*)
+If[$VersionNumber < 10.0,
+URLQueryEncode[strMatrix_] := 
+ StringJoin@
+  Riffle[StringJoin[#[[1]], "=", #[[2]]] & /@ 
+    Map[StringReplace[#, {" " -> "+", "!" -> "%21", "#" -> "%22", 
+        "$" -> "%24", "&" -> "%26", "'" -> "%27", "(" -> "%28", 
+        ")" -> "%29", "*" -> "%2A", "+" -> "%2B", "," -> "%2C", 
+        "/" -> "%2F", ":" -> "%3A", ";" -> "%3B", "=" -> "%3D", 
+        "?" -> "%3F", "@" -> "%40", "[" -> "%5B", "]" -> "%5D"}] &, 
+     strMatrix, {2}], "&"]
+];
 
 BotAPICall[method_String, args_List, bot_] :=
     Block[ {url},
@@ -58,7 +72,7 @@ BotAPICall[method_String, args_List, bot_] :=
         Import[url, "JSON"]
     ]
   
-(*Original idea taken from http://mathematica.stackexchange.com/questions/52338/more-complete-mutipartdata-posts-using-urlfetch *)  
+  
 BotFileAPICall[method_String, args_List, filePath_String,fileField_String,bot_] :=
     Block[ {url,bytes,filename},
     	bytes=Import[filePath,"Byte"];
@@ -68,6 +82,7 @@ BotFileAPICall[method_String, args_List, filePath_String,fileField_String,bot_] 
                "",
                "?" <> URLQueryEncode[args]
            ];
+        (*Original idea taken from http://mathematica.stackexchange.com/questions/52338/more-complete-mutipartdata-posts-using-urlfetch *)
         URLExecute[url,{},"JSON","Method"->"POST","MultipartElements"->{{fileField<>"\"; filename=\""<>filename,"application/octet-stream",bytes}},"Headers"->{"Accept"->"application/json; charset=UTF-8","Content-Type"->"multipart/form-data"}]
     ]
 
