@@ -411,43 +411,24 @@ Cell[BoxData[
    RowBox[{"msg_", ",", "bot_"}], "]"}], " ", ":=", " ", "\n", " ", 
   RowBox[{"Block", "[", 
    RowBox[{
-    RowBox[{"{", 
-     RowBox[{"time", ",", " ", "timeNow"}], "}"}], ",", " ", 
+    RowBox[{"{", "time", "}"}], ",", " ", 
     RowBox[{
      RowBox[{"time", " ", "=", " ", 
       RowBox[{"JSONElement", "[", 
        RowBox[{"msg", ",", 
         RowBox[{"{", 
          RowBox[{"\"\<message\>\"", ",", "\"\<date\>\""}], "}"}]}], "]"}]}], 
-     ";", "\[IndentingNewLine]", 
-     RowBox[{"timeNow", "=", 
-      RowBox[{"UnixTime", "[", "]"}]}], ";", "\[IndentingNewLine]", 
-     RowBox[{"(*", 
-      RowBox[{
-       RowBox[{"UnixTime", " ", "is", " ", "10.1"}], "+", 
-       RowBox[{
-        RowBox[{".", " ", "Recalculate"}], " ", "if", " ", "needed"}]}], 
-      "*)"}], "\[IndentingNewLine]", 
-     RowBox[{"If", "[", 
-      RowBox[{
-       RowBox[{"Not", "[", 
-        RowBox[{"NumberQ", "[", 
-         RowBox[{"UnixTime", "[", "]"}], "]"}], "]"}], ",", 
-       RowBox[{"timeNow", "=", 
-        RowBox[{"Floor", "[", 
-         RowBox[{
-          RowBox[{"AbsoluteTime", "[", "]"}], "-", "2208988800", "-", 
-          RowBox[{"$TimeZone", "*", "3600"}]}], "]"}]}]}], "]"}], ";", "\n", 
-     " ", 
+     ";", "\n", " ", 
      RowBox[{"{", 
       RowBox[{"True", ",", " ", 
        RowBox[{"BotAnswerMsg", "[", 
         RowBox[{"msg", ",", " ", 
          RowBox[{"\"\<Pong: \>\"", " ", "<>", " ", 
           RowBox[{"ToString", "[", 
-           RowBox[{"timeNow", " ", "-", " ", "time"}], "]"}], " ", "<>", " ", 
-          "\"\< s.\>\""}], ",", "bot"}], "]"}]}], "}"}]}]}], "\n", "  ", 
-   "]"}]}]], "Input",
+           RowBox[{
+            RowBox[{"UnixTime", "[", "]"}], " ", "-", " ", "time"}], "]"}], 
+          " ", "<>", " ", "\"\< s.\>\""}], ",", "bot"}], "]"}]}], "}"}]}]}], 
+   "\n", "  ", "]"}]}]], "Input",
  InitializationCell->True],
 
 Cell["Sending a random music file", "Text"],
@@ -576,6 +557,23 @@ Cell[BoxData[
                RowBox[{"{", "\"\<I love you, Telegram bot <3\>\"", "}"}]}], 
               "}"}], "]"}]}]}], "}"}], ",", "bot"}], "]"}]}], "}"}]}]}], "\n",
     "  ", "]"}]}]], "Input",
+ InitializationCell->True],
+
+Cell["UnixTime is not defined in 10.0-. Let\[CloseCurlyQuote]s add \
+compatibility:", "Text"],
+
+Cell[BoxData[
+ RowBox[{"If", "[", 
+  RowBox[{
+   RowBox[{"Not", "[", 
+    RowBox[{"NumberQ", "[", 
+     RowBox[{"UnixTime", "[", "]"}], "]"}], "]"}], ",", 
+   RowBox[{
+    RowBox[{"UnixTime", "[", "]"}], ":=", 
+    RowBox[{"Floor", "[", 
+     RowBox[{
+      RowBox[{"AbsoluteTime", "[", "]"}], "-", "2208988800", "-", 
+      RowBox[{"$TimeZone", "*", "3600"}]}], "]"}]}]}], "]"}]], "Input",
  InitializationCell->True],
 
 Cell["\<\
