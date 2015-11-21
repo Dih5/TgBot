@@ -19,6 +19,23 @@ Cell[TextData[{
  "."
 }], "Text"],
 
+Cell["\<\
+If you haven\[CloseCurlyQuote]t installed the package you may call either \
+automated install with:\
+\>", "Text"],
+
+Cell[BoxData[
+ RowBox[{"Get", "[", 
+  "\"\<https://raw.githubusercontent.com/dih5/TgBot/master/BootstrapInstall.m\
+\>\"", "]"}]], "Input"],
+
+Cell["Or online version with:", "Text"],
+
+Cell[BoxData[
+ RowBox[{"Get", "[", 
+  "\"\<https://raw.githubusercontent.com/dih5/TgBot/master/TgBot/TgBot.m\>\"",
+   "]"}]], "Input"],
+
 Cell[BoxData[
  RowBox[{"Needs", "[", "\"\<TgBot`\>\"", "]"}]], "Input",
  InitializationCell->True],
