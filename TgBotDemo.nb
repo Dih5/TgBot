@@ -43,7 +43,8 @@ Cell[BoxData[
    RowBox[{"FileNameJoin", "[", 
     RowBox[{"{", 
      RowBox[{"$HomeDirectory", ",", "\"\<tgbot\>\"", ",", "\"\<tmp\>\""}], 
-     "}"}], "]"}]}], ";"}]], "Input"],
+     "}"}], "]"}]}], ";"}]], "Input",
+ InitializationCell->True],
 
 Cell[TextData[{
  "The ",
@@ -206,7 +207,8 @@ thee.\>\"", ",", " ", "_", ",", " ", "\n", "    ",
       RowBox[{"True", ",", 
        RowBox[{"BotAnswerMsg", "[", 
         RowBox[{"msg", ",", " ", "str", ",", "bot"}], "]"}]}], "}"}]}]}], 
-   "\n", "  ", "]"}]}]], "Input"],
+   "\n", "  ", "]"}]}]], "Input",
+ InitializationCell->True],
 
 Cell["\<\
 Execute a Wolfram statement (very dangerous, do not allow to strangers!)\
@@ -309,7 +311,8 @@ Cell[BoxData[
              RowBox[{"msg", ",", 
               RowBox[{"ToString", "[", "eval", "]"}], ",", "bot"}], "]"}]}], 
            "}"}]}], "\[IndentingNewLine]", "]"}]}]}], "\n", "  ", "]"}]}]}], 
-   "\n", "  ", "]"}]}]], "Input"],
+   "\n", "  ", "]"}]}]], "Input",
+ InitializationCell->True],
 
 Cell["\<\
 Execute a shell statement (very dangerous, do not allow to strangers!)\
@@ -394,7 +397,8 @@ Cell[BoxData[
               RowBox[{
               "\"\<reply_to_message_id\>\"", " ", "->", " ", "msgId"}]}], 
              "}"}], ",", "bot"}], "]"}]}], "}"}]}]}], "\[IndentingNewLine]", 
-      "]"}]}]}], "\n", "  ", "]"}]}]], "Input"],
+      "]"}]}]}], "\n", "  ", "]"}]}]], "Input",
+ InitializationCell->True],
 
 Cell["\<\
 Measure time between recieved message time and bot\[CloseCurlyQuote]s local \
@@ -426,7 +430,8 @@ Cell[BoxData[
            RowBox[{
             RowBox[{"UnixTime", "[", "]"}], " ", "-", " ", "time"}], "]"}], 
           " ", "<>", " ", "\"\< s.\>\""}], ",", "bot"}], "]"}]}], "}"}]}]}], 
-   "\n", "  ", "]"}]}]], "Input"],
+   "\n", "  ", "]"}]}]], "Input",
+ InitializationCell->True],
 
 Cell["Sending a random music file", "Text"],
 
@@ -487,7 +492,8 @@ Cell[BoxData[
        RowBox[{"True", ",", " ", 
         RowBox[{"BotAudioAnswerMsg", "[", 
          RowBox[{"msg", ",", " ", "filePath", ",", "bot"}], "]"}]}], 
-       "}"}]}]}]}], "\n", "  ", "]"}]}]], "Input"],
+       "}"}]}]}]}], "\n", "  ", "]"}]}]], "Input",
+ InitializationCell->True],
 
 Cell["Setting an example custom keyboard", "Text"],
 
@@ -552,7 +558,8 @@ Cell[BoxData[
                RowBox[{"{", "\"\</music\>\"", "}"}], ",", 
                RowBox[{"{", "\"\<I love you, Telegram bot <3\>\"", "}"}]}], 
               "}"}], "]"}]}]}], "}"}], ",", "bot"}], "]"}]}], "}"}]}]}], "\n",
-    "  ", "]"}]}]], "Input"],
+    "  ", "]"}]}]], "Input",
+ InitializationCell->True],
 
 Cell["\<\
 At the moment, the bot calls package provided functions BotErrorNoCmd, \
@@ -569,7 +576,8 @@ Cell[BoxData[
     RowBox[{"BotAnswerMsg", "[", 
      RowBox[{
      "msg", ",", "\"\<I'd love to talk, but I don't know how to do it!\>\"", 
-      ",", "bot"}], "]"}]}], "}"}]}]], "Input"],
+      ",", "bot"}], "]"}]}], "}"}]}]], "Input",
+ InitializationCell->True],
 
 Cell["\<\
 You can also override BotLog to change the way to see debug error (or supress \
@@ -582,7 +590,8 @@ Cell[BoxData[
   RowBox[{"Print", "[", 
    RowBox[{
     RowBox[{"DateString", "[", "]"}], "<>", "\"\<: \>\"", "<>", "str"}], 
-   "]"}]}]], "Input"],
+   "]"}]}]], "Input",
+ InitializationCell->True],
 
 Cell["\<\
 Example of manually calling an API. Test this to see if your token works.\
