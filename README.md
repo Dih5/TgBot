@@ -1,6 +1,6 @@
 # TgBot
 
-[![release v0.1.0](http://img.shields.io/badge/release-v0.1.0-red.svg)](https://github.com/dih5/TgBot/releases/latest)
+[![release v0.1.1](http://img.shields.io/badge/release-v0.1.1-red.svg)](https://github.com/dih5/TgBot/releases/latest)
 [![Semantic Versioning](https://img.shields.io/badge/SemVer-2.0.0-brightgreen.svg)](http://semver.org/spec/v2.0.0.html)
 [![license MIT](https://img.shields.io/badge/license-MIT%20Licencse-blue.svg)](https://github.com/dih5/TgBot/blob/master/LICENSE.txt)
 [![Mathematica 10](https://img.shields.io/badge/Mathematica-10-brightgreen.svg)](#compatibility)
@@ -50,7 +50,7 @@ To load TgBot package evaluate: ``Needs["TgBot`"]``.
 ### Manual installation
 
 1. Download latest released
-   [TgBot.zip](https://github.com/dih5/TgBot/releases/download/v0.1.0/TgBot.zip)
+   [TgBot.zip](https://github.com/dih5/TgBot/releases/download/v0.1.1/TgBot.zip)
    file.
 
 2. Extract downloaded `TgBot.zip` to any directory which is on the Mathematica `$Path`,
@@ -83,8 +83,7 @@ As long as version < 1.0.0 documentation will *not* be integrated in the Mathema
 ## Compatibility
 
 The package is being build with Mathematica version 10.* on Windows|Linux.
-It will *not work for earlier versions* as it uses some functions which are 10.0+.
-Partial support might be added for earlier versions in the future.
+*Some functionality is not available for earlier versions* as it depends on some functions which are 10.0+. Partial support is still offered.
 
 
 
