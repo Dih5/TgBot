@@ -28,7 +28,7 @@ Check the following example:
 
 ![alt tag](https://raw.github.com/dih5/TgBot/master/demo.png)
 
-This bot is done using the example notebook in this project.
+This bot is done using [the example notebook](https://raw.githubusercontent.com/dih5/TgBot/master/TgBotDemo.nb) in this project.
 Check out that notebook to see how the package is used.
 
 ## Installation
