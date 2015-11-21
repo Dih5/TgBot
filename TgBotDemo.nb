@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       158,          7]
-NotebookDataLength[     34830,        873]
-NotebookOptionsPosition[     31585,        779]
-NotebookOutlinePosition[     32762,        812]
-CellTagsIndexPosition[     32478,        804]
+NotebookDataLength[     35042,        877]
+NotebookOptionsPosition[     31797,        783]
+NotebookOutlinePosition[     32974,        816]
+CellTagsIndexPosition[     32690,        808]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -61,7 +61,9 @@ Cell[BoxData[
  CellChangeTimes->{{3.6566857827183332`*^9, 3.6566858367126045`*^9}, {
    3.6566858851526356`*^9, 3.656685885496419*^9}, 3.657006246788329*^9, {
    3.6570565134689555`*^9, 3.657056514312751*^9}, {3.6570576239007244`*^9, 
-   3.657057624150738*^9}, {3.6570577572255106`*^9, 3.65705775977252*^9}}],
+   3.657057624150738*^9}, {3.6570577572255106`*^9, 3.65705775977252*^9}, {
+   3.657093027537634*^9, 3.6570930285689344`*^9}, {3.6570935098303623`*^9, 
+   3.657093510127247*^9}}],
 
 Cell["Path to a temp directory used by the bot", "Text",
  CellChangeTimes->{{3.6570058583251843`*^9, 3.657005876653847*^9}, {
@@ -405,9 +407,8 @@ Cell[BoxData[
   RowBox[{"Block", "[", 
    RowBox[{
     RowBox[{"{", 
-     RowBox[{
-     "fromid", ",", " ", "str", ",", " ", "msgId", ",", " ", "ret", ",", 
-      "strSplit"}], "}"}], ",", " ", "\n", "  ", 
+     RowBox[{"fromid", ",", " ", "msgId", ",", " ", "ret", ",", "strSplit"}], 
+     "}"}], ",", " ", "\n", "  ", 
     RowBox[{
      RowBox[{"fromid", " ", "=", " ", 
       RowBox[{"JSONElement", "[", 
@@ -453,8 +454,10 @@ Cell[BoxData[
          RowBox[{"RunProcess", "[", 
           RowBox[{
           "$SystemShell", ",", " ", "\"\<StandardOutput\>\"", ",", " ", 
-           RowBox[{"str", " ", "<>", " ", "\"\<\\nexit\\n\>\""}]}], "]"}]}], 
-        ";", "\[IndentingNewLine]", 
+           RowBox[{
+            RowBox[{"strSplit", "[", 
+             RowBox[{"[", "2", "]"}], "]"}], " ", "<>", " ", 
+            "\"\<\\nexit\\n\>\""}]}], "]"}]}], ";", "\[IndentingNewLine]", 
         RowBox[{"(*", 
          RowBox[{
           RowBox[{
@@ -481,7 +484,8 @@ Cell[BoxData[
  CellChangeTimes->{{3.645182497358186*^9, 3.6451825169023542`*^9}, {
   3.656319680972822*^9, 3.656319683874023*^9}, {3.6566867359460087`*^9, 
   3.656686766892459*^9}, {3.657011374656209*^9, 3.6570114209470115`*^9}, {
-  3.6570114527325325`*^9, 3.657011548292369*^9}}],
+  3.6570114527325325`*^9, 3.657011548292369*^9}, {3.657093014318185*^9, 
+  3.6570930174120984`*^9}}],
 
 Cell["\<\
 Measure time between recieved message time and bot\[CloseCurlyQuote]s local \
@@ -788,25 +792,25 @@ StyleDefinitions->"Default.nb"
 (*CellTagsOutline
 CellTagsIndex->{
  "Info-ac1aa10b-6545-41ab-931a-8b9347671348"->{
-  Cell[9454, 225, 248, 4, 40, "Print",
+  Cell[9558, 227, 248, 4, 40, "Print",
    CellTags->"Info-ac1aa10b-6545-41ab-931a-8b9347671348"]},
  "Info-1326764c-2fcd-4d61-9e6e-a1cbf70a3242"->{
-  Cell[28197, 682, 273, 5, 40, "Print",
+  Cell[28409, 686, 273, 5, 40, "Print",
    CellTags->"Info-1326764c-2fcd-4d61-9e6e-a1cbf70a3242"]},
  "Info-3a6472fd-8c07-4806-9352-17ff25233472"->{
-  Cell[29246, 715, 274, 5, 40, "Print",
+  Cell[29458, 719, 274, 5, 40, "Print",
    CellTags->"Info-3a6472fd-8c07-4806-9352-17ff25233472"]},
  "Info-9b376e0d-a2dc-458d-9a99-ae37e6a5e1a3"->{
-  Cell[30944, 763, 266, 4, 40, "Print",
+  Cell[31156, 767, 266, 4, 40, "Print",
    CellTags->"Info-9b376e0d-a2dc-458d-9a99-ae37e6a5e1a3"]}
  }
 *)
 (*CellTagsIndex
 CellTagsIndex->{
- {"Info-ac1aa10b-6545-41ab-931a-8b9347671348", 31912, 789},
- {"Info-1326764c-2fcd-4d61-9e6e-a1cbf70a3242", 32059, 792},
- {"Info-3a6472fd-8c07-4806-9352-17ff25233472", 32207, 795},
- {"Info-9b376e0d-a2dc-458d-9a99-ae37e6a5e1a3", 32355, 798}
+ {"Info-ac1aa10b-6545-41ab-931a-8b9347671348", 32124, 793},
+ {"Info-1326764c-2fcd-4d61-9e6e-a1cbf70a3242", 32271, 796},
+ {"Info-3a6472fd-8c07-4806-9352-17ff25233472", 32419, 799},
+ {"Info-9b376e0d-a2dc-458d-9a99-ae37e6a5e1a3", 32567, 802}
  }
 *)
 (*NotebookFileOutline
@@ -817,63 +821,63 @@ Cell[696, 25, 532, 15, 30, "Text"],
 Cell[1231, 42, 219, 4, 31, "Input",
  InitializationCell->True],
 Cell[1453, 48, 127, 1, 30, "Text"],
-Cell[1583, 51, 566, 12, 31, "Input",
+Cell[1583, 51, 670, 14, 31, "Input",
  InitializationCell->True],
-Cell[2152, 65, 172, 2, 30, "Text"],
-Cell[2327, 69, 347, 9, 31, "Input",
+Cell[2256, 67, 172, 2, 30, "Text"],
+Cell[2431, 71, 347, 9, 31, "Input",
  InitializationCell->True],
-Cell[2677, 80, 1148, 20, 239, "Text"],
-Cell[3828, 102, 2114, 41, 220, "Text"],
-Cell[5945, 145, 1975, 34, 239, "Text"],
-Cell[7923, 181, 1179, 29, 52, "Input",
+Cell[2781, 82, 1148, 20, 239, "Text"],
+Cell[3932, 104, 2114, 41, 220, "Text"],
+Cell[6049, 147, 1975, 34, 239, "Text"],
+Cell[8027, 183, 1179, 29, 52, "Input",
  InitializationCell->True],
-Cell[9105, 212, 201, 5, 49, "Text"],
+Cell[9209, 214, 201, 5, 49, "Text"],
 Cell[CellGroupData[{
-Cell[9331, 221, 120, 2, 31, "Input"],
-Cell[9454, 225, 248, 4, 40, "Print",
+Cell[9435, 223, 120, 2, 31, "Input"],
+Cell[9558, 227, 248, 4, 40, "Print",
  CellTags->"Info-ac1aa10b-6545-41ab-931a-8b9347671348"]
 }, Open  ]],
-Cell[9717, 232, 131, 1, 30, "Text"],
-Cell[9851, 235, 1901, 44, 212, "Input",
+Cell[9821, 234, 131, 1, 30, "Text"],
+Cell[9955, 237, 1901, 44, 212, "Input",
  InitializationCell->True],
-Cell[11755, 281, 163, 3, 30, "Text"],
-Cell[11921, 286, 4731, 107, 372, "Input",
+Cell[11859, 283, 163, 3, 30, "Text"],
+Cell[12025, 288, 4731, 107, 372, "Input",
  InitializationCell->True],
-Cell[16655, 395, 161, 3, 30, "Text"],
-Cell[16819, 400, 3534, 83, 332, "Input",
+Cell[16759, 397, 161, 3, 30, "Text"],
+Cell[16923, 402, 3642, 85, 332, "Input",
  InitializationCell->True],
-Cell[20356, 485, 191, 4, 30, "Text"],
-Cell[20550, 491, 1122, 29, 92, "Input",
+Cell[20568, 489, 191, 4, 30, "Text"],
+Cell[20762, 495, 1122, 29, 92, "Input",
  InitializationCell->True],
-Cell[21675, 522, 107, 1, 30, "Text"],
-Cell[21785, 525, 2668, 65, 132, "Input",
+Cell[21887, 526, 107, 1, 30, "Text"],
+Cell[21997, 529, 2668, 65, 132, "Input",
  InitializationCell->True],
-Cell[24456, 592, 196, 2, 30, "Text"],
-Cell[24655, 596, 3133, 71, 192, "Input",
+Cell[24668, 596, 196, 2, 30, "Text"],
+Cell[24867, 600, 3133, 71, 192, "Input",
  InitializationCell->True],
-Cell[27791, 669, 258, 5, 49, "Text"],
+Cell[28003, 673, 258, 5, 49, "Text"],
 Cell[CellGroupData[{
-Cell[28074, 678, 120, 2, 31, "Input"],
-Cell[28197, 682, 273, 5, 40, "Print",
+Cell[28286, 682, 120, 2, 31, "Input"],
+Cell[28409, 686, 273, 5, 40, "Print",
  CellTags->"Info-1326764c-2fcd-4d61-9e6e-a1cbf70a3242"]
 }, Open  ]],
-Cell[28485, 690, 385, 10, 31, "Input"],
-Cell[28873, 702, 226, 5, 30, "Text"],
+Cell[28697, 694, 385, 10, 31, "Input"],
+Cell[29085, 706, 226, 5, 30, "Text"],
 Cell[CellGroupData[{
-Cell[29124, 711, 119, 2, 31, "Input"],
-Cell[29246, 715, 274, 5, 40, "Print",
+Cell[29336, 715, 119, 2, 31, "Input"],
+Cell[29458, 719, 274, 5, 40, "Print",
  CellTags->"Info-3a6472fd-8c07-4806-9352-17ff25233472"]
 }, Open  ]],
-Cell[29535, 723, 421, 9, 31, "Input"],
-Cell[29959, 734, 216, 4, 30, "Text"],
-Cell[30178, 740, 431, 9, 31, "Input"],
-Cell[30612, 751, 209, 4, 30, "Text"],
+Cell[29747, 727, 421, 9, 31, "Input"],
+Cell[30171, 738, 216, 4, 30, "Text"],
+Cell[30390, 744, 431, 9, 31, "Input"],
+Cell[30824, 755, 209, 4, 30, "Text"],
 Cell[CellGroupData[{
-Cell[30846, 759, 95, 2, 31, "Input"],
-Cell[30944, 763, 266, 4, 40, "Print",
+Cell[31058, 763, 95, 2, 31, "Input"],
+Cell[31156, 767, 266, 4, 40, "Print",
  CellTags->"Info-9b376e0d-a2dc-458d-9a99-ae37e6a5e1a3"]
 }, Open  ]],
-Cell[31225, 770, 344, 6, 31, "Input"]
+Cell[31437, 774, 344, 6, 31, "Input"]
 }, Open  ]]
 }
 ]
