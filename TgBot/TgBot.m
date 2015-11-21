@@ -24,8 +24,6 @@ Begin["`Private`"]
 
 $CharacterEncoding = "UTF-8";
 
-Sleep[t_] :=
-    RunProcess[$SystemShell, "ExitCode", "sleep " <> ToString[t] <> "\nexit\n"];
 
 (*TODO: Handle errors*)
 JSONElement[json_, lst_List] := Fold[#2 /. #1 &, json, lst]
@@ -164,7 +162,7 @@ BotStart[pollTime_, botPath_, BotCmdList_] :=
                       ]
                   ];
               ];
-              Sleep[pollTime]]
+              Pause[pollTime]]
           ], {URLFetch::invhttp, FetchURL::conopen}]
           
 SavePartialCommand[msg_,append_:False]:= Block[{id,txt,p},
