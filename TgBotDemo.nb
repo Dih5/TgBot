@@ -1,0 +1,882 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 10.1' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[     34830,        873]
+NotebookOptionsPosition[     31585,        779]
+NotebookOutlinePosition[     32762,        812]
+CellTagsIndexPosition[     32478,        804]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell["Simple Telegram bot demo", "Section",
+ CellChangeTimes->{{3.6570058101306324`*^9, 3.6570058224366903`*^9}}],
+
+Cell[TextData[{
+ "If you are new to Telegram bots first check the ",
+ ButtonBox["introduction to bots",
+  BaseStyle->"Hyperlink",
+  ButtonData->{
+    URL["https://core.telegram.org/bots"], None},
+  ButtonNote->"https://core.telegram.org/bots"],
+ " and the ",
+ ButtonBox["introduction to the bot API",
+  BaseStyle->"Hyperlink",
+  ButtonData->{
+    URL["https://core.telegram.org/bots/api"], None},
+  ButtonNote->"https://core.telegram.org/bots/api"],
+ "."
+}], "Text",
+ CellChangeTimes->{{3.657030096422677*^9, 3.657030162921835*^9}}],
+
+Cell[BoxData[
+ RowBox[{"Needs", "[", "\"\<TgBot`\>\"", "]"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.6450871188424273`*^9, 3.645087156679516*^9}, {
+  3.6570317827073774`*^9, 3.6570317859731874`*^9}}],
+
+Cell["Path to a configuration file in JSON format", "Text",
+ CellChangeTimes->{{3.657005840332319*^9, 3.6570058544162955`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"$BotConfigFile", " ", "=", " ", 
+   RowBox[{"FileNameJoin", "[", 
+    RowBox[{"{", 
+     RowBox[{
+     "$HomeDirectory", ",", "\"\<tgbot\>\"", ",", "\"\<demo.json\>\""}], 
+     "}"}], "]"}]}], ";"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.6566857827183332`*^9, 3.6566858367126045`*^9}, {
+   3.6566858851526356`*^9, 3.656685885496419*^9}, 3.657006246788329*^9, {
+   3.6570565134689555`*^9, 3.657056514312751*^9}, {3.6570576239007244`*^9, 
+   3.657057624150738*^9}, {3.6570577572255106`*^9, 3.65705775977252*^9}}],
+
+Cell["Path to a temp directory used by the bot", "Text",
+ CellChangeTimes->{{3.6570058583251843`*^9, 3.657005876653847*^9}, {
+  3.65703017240498*^9, 3.657030172779999*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"$BotTmpDir", " ", "=", " ", 
+   RowBox[{"FileNameJoin", "[", 
+    RowBox[{"{", 
+     RowBox[{"$HomeDirectory", ",", "\"\<tgbot\>\"", ",", "\"\<tmp\>\""}], 
+     "}"}], "]"}]}], ";"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.656685850307084*^9, 3.656685872542602*^9}, 
+   3.657006248350912*^9}],
+
+Cell[TextData[{
+ "The ",
+ StyleBox["config file",
+  FontWeight->"Bold"],
+ " is a JSON where some parameters are defined. As a first example you may \
+paste the following in the path selected by $BotConfigFile:\n\n{\n    \
+\[OpenCurlyDoubleQuote]FriendList\[CloseCurlyDoubleQuote]: [ ],\n    \
+\[OpenCurlyDoubleQuote]Token\[CloseCurlyDoubleQuote]: \
+\[OpenCurlyDoubleQuote]PasteYourTokenHere\[CloseCurlyDoubleQuote],\n    \
+\[OpenCurlyDoubleQuote]MasterList\[CloseCurlyDoubleQuote]: [    ],\n    \
+\[OpenCurlyDoubleQuote]LastAnswered\[CloseCurlyDoubleQuote]: 1,\n    \
+\[OpenCurlyDoubleQuote]ErrorNoCmd\[CloseCurlyDoubleQuote]: \
+\[OpenCurlyDoubleQuote]Please, send me a command.\[CloseCurlyDoubleQuote],\n  \
+  \[OpenCurlyDoubleQuote]ErrorUnknownCmd\[CloseCurlyDoubleQuote]: \
+\[OpenCurlyDoubleQuote]I do not know such a command.\[CloseCurlyDoubleQuote],\
+\n    \[OpenCurlyDoubleQuote]ErrorUnprivilegedCmd\[CloseCurlyDoubleQuote]: \
+\[OpenCurlyDoubleQuote]You are not allowed to do \
+that.\[CloseCurlyDoubleQuote]\n}\n"
+}], "Text",
+ CellChangeTimes->{{3.657005881187476*^9, 3.657005905769498*^9}, {
+  3.6570575941524196`*^9, 3.657057649054765*^9}}],
+
+Cell[TextData[{
+ StyleBox["Fields in the config file",
+  FontWeight->"Bold"],
+ ":\n",
+ StyleBox["Token",
+  FontSlant->"Italic"],
+ " is the value authenticating your bot (see ",
+ ButtonBox["here",
+  BaseStyle->"Hyperlink",
+  ButtonData->{
+    URL["https://core.telegram.org/bots/api#authorizing-your-bot"], None},
+  ButtonNote->"https://core.telegram.org/bots/api#authorizing-your-bot"],
+ "). Get it and put it there.\n",
+ StyleBox["MasterList",
+  FontSlant->"Italic"],
+ " is a list of integers identifying the users allowed to call any command \
+(privilege 2). Might be empty []. Later you\[CloseCurlyQuote]d probably like \
+to enter your user id in the MasterList. You can check it when the bot \
+recieves your messages.\n",
+ StyleBox["FriendList",
+  FontSlant->"Italic"],
+ " is a list of integers identyfing the users allowed to call some commands \
+(privilege 1). Might be empty [].\nAny user out of these lists will be \
+assigned privilege 0.\nIf no risky command is allowed you may leave those \
+empty and allow every user to execute any command.\n",
+ StyleBox["LastAnswered",
+  FontSlant->"Italic"],
+ " is the integer identifying the last message answered. Messages are stored \
+in the servers up to 24 hours, this is used to avoid answering multiple times \
+when restarting the bot.\nBEWARE: as such integer will eventually overflow \
+the bot will stop answering when that happens. Manually change the parameter \
+in the config file to 1 when that happens.\n\nAppart from that, you can store \
+any option in the config file. The sample file shows 3 strings, which are \
+read by some default functions in the package."
+}], "Text",
+ CellChangeTimes->{{3.657005913739891*^9, 3.6570059207281103`*^9}, {
+  3.6570059559177437`*^9, 3.6570062247805076`*^9}, {3.657006265860862*^9, 
+  3.6570065657294617`*^9}, {3.6570302405511503`*^9, 3.657030250631091*^9}, {
+  3.6570303517273073`*^9, 3.6570303880324965`*^9}, {3.657057167524435*^9, 
+  3.6570572118365583`*^9}, {3.6570572828591633`*^9, 3.6570573517650476`*^9}, {
+  3.6570573959160476`*^9, 3.6570575669047513`*^9}, {3.657057668051952*^9, 
+  3.6570577472144356`*^9}}],
+
+Cell[TextData[{
+ "The ",
+ StyleBox["bot\[CloseCurlyQuote]s command list",
+  FontWeight->"Bold"],
+ " consists on:\n1- A string identifying the command in Telegram. Messages \
+starting with \\thisString will be understood as calling this command. It \
+should correspond to the ones registered in the bot (see ",
+ ButtonBox["here",
+  BaseStyle->"Hyperlink",
+  ButtonData->{
+    URL["https://core.telegram.org/bots#edit-settings"], None},
+  ButtonNote->"https://core.telegram.org/bots#edit-settings"],
+ "), but it is not mandatory.\n2 - An element of {0, 1, 2} refering to the \
+minimum privilege needed to execute the command. 0 = anyone, 1 = friends, 2 = \
+masters.\n3 - The ",
+ StyleBox["Mathematica",
+  FontSlant->"Italic"],
+ " function associated with the command.\n     These functions recieve two \
+JSON arguments: the message that initiated the call and the bot itself.\n     \
+They MUST return a list of elements:\n     \ti) A boolean value indicating if \
+the message was considered complete or not. If # === False, the bot \
+understands the command is not completed yet. The next message will be \
+preprocesed to have the command added. This is useful for mobile interfaces, \
+where the command is selected from a list. It can also be used to set up a \
+ReplyKeyboard. Any other value from False is understood as completed.\n     \t\
+ii) An object representing the result of the API called to anser the message. \
+Package provided functions like BotAnswerMsg return appropiate JSON objects \
+or $Failed if failed. This object is used to decide wheter to retry API \
+calling if failed (e.g., due to internet connection lost) and to update \
+LastAnswered if succeded."
+}], "Text",
+ CellChangeTimes->{{3.657006580589509*^9, 3.6570066621999893`*^9}, {
+   3.657006720774655*^9, 3.657006915033844*^9}, {3.657010242573041*^9, 
+   3.657010537051838*^9}, {3.6570106388502936`*^9, 3.657010758707404*^9}, {
+   3.657010792076809*^9, 3.6570109820912647`*^9}, 3.657030413332642*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"$BotCmdList", " ", "=", " ", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"\"\<whoami\>\"", ",", " ", "0", ",", " ", "CmdWhoami"}], "}"}],
+      ",", " ", 
+     RowBox[{"{", 
+      RowBox[{"\"\<wolfram\>\"", ",", " ", "2", ",", " ", "CmdWolfram"}], 
+      "}"}], ",", " ", 
+     RowBox[{"{", 
+      RowBox[{"\"\<shell\>\"", ",", "\n", "    ", "2", ",", " ", "CmdShell"}],
+       "}"}], ",", " ", 
+     RowBox[{"{", 
+      RowBox[{"\"\<ping\>\"", ",", " ", "0", ",", " ", "CmdPing"}], "}"}], 
+     ",", 
+     RowBox[{"{", 
+      RowBox[{"\"\<music\>\"", ",", " ", "1", ",", " ", "CmdMusic"}], "}"}], 
+     ",", 
+     RowBox[{"{", 
+      RowBox[{"\"\<customkb\>\"", ",", " ", "0", ",", " ", "CmdCustomKb"}], 
+      "}"}]}], "}"}]}], ";"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{
+  3.645087369005204*^9, {3.656334383719005*^9, 3.6563343993294067`*^9}, {
+   3.65633749342369*^9, 3.65633750485277*^9}, {3.6565970896062536`*^9, 
+   3.656597089746895*^9}, {3.6566868152739415`*^9, 3.6566868275651474`*^9}, {
+   3.6570119997162466`*^9, 3.6570120067844057`*^9}, {3.6570261697529125`*^9, 
+   3.6570261984362564`*^9}}],
+
+Cell["\<\
+Implementation of demo commands.
+Check the package provided functions with ?, e.g.:\
+\>", "Text",
+ CellChangeTimes->{{3.657011047286499*^9, 3.6570110815447855`*^9}, 
+   3.657011134336041*^9}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"?", "BotAnswerMsg"}]], "Input",
+ CellChangeTimes->{{3.65701108658444*^9, 3.657011098152674*^9}}],
+
+Cell[BoxData[
+ StyleBox["\<\"BotAnswerMsg[msg, txt, bot] makes the bot answer a given \
+message with given text.\"\>", "MSG"]], "Print", "PrintUsage",
+ CellChangeTimes->{3.657057867916581*^9},
+ CellTags->"Info-ac1aa10b-6545-41ab-931a-8b9347671348"]
+}, Open  ]],
+
+Cell["Return a sentence based on your privilege level", "Text",
+ CellChangeTimes->{{3.657011147785698*^9, 3.6570111577591534`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"CmdWhoami", "[", 
+   RowBox[{"msg_", ",", "bot_"}], "]"}], " ", ":=", " ", "\n", " ", 
+  RowBox[{"Block", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"fromid", ",", " ", "str", ",", " ", "msgId"}], "}"}], ",", 
+    "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"fromid", " ", "=", " ", 
+      RowBox[{"JSONElement", "[", 
+       RowBox[{"msg", ",", 
+        RowBox[{"{", 
+         RowBox[{"\"\<message\>\"", ",", "\"\<from\>\"", ",", "\"\<id\>\""}], 
+         "}"}]}], "]"}]}], ";", "\n", "  ", 
+     RowBox[{"msgId", " ", "=", " ", 
+      RowBox[{"JSONElement", "[", 
+       RowBox[{"msg", ",", 
+        RowBox[{"{", 
+         RowBox[{"\"\<message\>\"", ",", "\"\<message_id\>\""}], "}"}]}], 
+       "]"}]}], ";", "\n", "  ", 
+     RowBox[{"str", " ", "=", " ", 
+      RowBox[{"Switch", "[", 
+       RowBox[{
+        RowBox[{"BotUserPrivilege", "[", 
+         RowBox[{"fromid", ",", "bot"}], "]"}], ",", " ", "2", ",", " ", "\n",
+         "    ", 
+        "\"\<Thou art our master! :D\\nWe are pleased to see thee.\>\"", ",", 
+        " ", "1", ",", " ", "\n", "    ", 
+        "\"\<Thou befriendest our master! :D\\nWe are pleased to see \
+thee.\>\"", ",", " ", "_", ",", " ", "\n", "    ", 
+        "\"\<And thou art... we don't know thee!\\nWho art thou?\>\""}], 
+       "]"}]}], ";", "\n", "    ", 
+     RowBox[{"{", 
+      RowBox[{"True", ",", 
+       RowBox[{"BotAnswerMsg", "[", 
+        RowBox[{"msg", ",", " ", "str", ",", "bot"}], "]"}]}], "}"}]}]}], 
+   "\n", "  ", "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.645182468608622*^9, 3.645182508831872*^9}, {
+   3.645182933325881*^9, 3.645182933778942*^9}, {3.656319663060053*^9, 
+   3.656319670002833*^9}, {3.65659696758224*^9, 3.6565969710355463`*^9}, 
+   3.656597012475213*^9, {3.656686568801587*^9, 3.65668658752909*^9}, {
+   3.656690462222169*^9, 3.656690480319247*^9}}],
+
+Cell["\<\
+Execute a Wolfram statement (very dangerous, do not allow to strangers!)\
+\>", "Text",
+ CellChangeTimes->{{3.6570111626921234`*^9, 3.65701120666936*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"CmdWolfram", "[", 
+   RowBox[{"msg_", ",", "bot_"}], "]"}], " ", ":=", " ", "\n", " ", 
+  RowBox[{"Block", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{
+     "fromid", ",", " ", "strSplit", ",", "msgId", ",", "eval", ",", 
+      "filePath"}], "}"}], ",", " ", 
+    RowBox[{
+     RowBox[{"fromid", " ", "=", " ", 
+      RowBox[{"JSONElement", "[", 
+       RowBox[{"msg", ",", 
+        RowBox[{"{", 
+         RowBox[{"\"\<message\>\"", ",", "\"\<from\>\"", ",", "\"\<id\>\""}], 
+         "}"}]}], "]"}]}], ";", "\n", "  ", 
+     RowBox[{"msgId", " ", "=", " ", 
+      RowBox[{"JSONElement", "[", 
+       RowBox[{"msg", ",", 
+        RowBox[{"{", 
+         RowBox[{"\"\<message\>\"", ",", "\"\<message_id\>\""}], "}"}]}], 
+       "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"strSplit", "=", 
+      RowBox[{"StringSplit", "[", 
+       RowBox[{
+        RowBox[{"JSONElement", "[", 
+         RowBox[{"msg", ",", 
+          RowBox[{"{", 
+           RowBox[{"\"\<message\>\"", ",", "\"\<text\>\""}], "}"}]}], "]"}], 
+        ",", " ", "Whitespace", ",", " ", "2"}], "]"}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"If", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{
+         RowBox[{"Length", "[", "strSplit", "]"}], "<=", "1"}], "||", 
+        RowBox[{
+         RowBox[{"strSplit", "[", 
+          RowBox[{"[", "2", "]"}], "]"}], "\[Equal]", "\"\<\>\""}]}], ",", 
+       "\[IndentingNewLine]", 
+       RowBox[{"(*", 
+        RowBox[{"No", " ", "additional", " ", "arguments", " ", "were", " ", 
+         RowBox[{"given", ".", " ", "Wait"}], " ", "thus", " ", "for", " ", 
+         RowBox[{"them", "."}]}], "*)"}], "\[IndentingNewLine]", 
+       RowBox[{"{", 
+        RowBox[{"False", ",", "Null"}], "}"}], ",", "\[IndentingNewLine]", 
+       RowBox[{"(*", 
+        RowBox[{"Otherwise", " ", "evaluate", " ", "them"}], "*)"}], 
+       "\[IndentingNewLine]", 
+       RowBox[{
+        RowBox[{"eval", "=", 
+         RowBox[{"ToExpression", "[", 
+          RowBox[{"strSplit", "[", 
+           RowBox[{"[", "2", "]"}], "]"}], "]"}]}], ";", 
+        "\[IndentingNewLine]", 
+        RowBox[{"(*", 
+         RowBox[{
+          RowBox[{
+          "If", " ", "the", " ", "result", " ", "is", " ", "a", " ", 
+           "Graphics", " ", "object"}], ",", " ", 
+          RowBox[{"export", " ", "it", " ", "and", " ", "sent", " ", 
+           RowBox[{"it", "."}]}]}], "*)"}], "\[IndentingNewLine]", 
+        RowBox[{"Switch", "[", 
+         RowBox[{
+          RowBox[{"Head", "[", "eval", "]"}], ",", "Graphics", ",", 
+          RowBox[{
+           RowBox[{"filePath", "=", 
+            RowBox[{"FileNameJoin", "[", 
+             RowBox[{"{", 
+              RowBox[{"$BotTmpDir", ",", 
+               RowBox[{
+                RowBox[{"DateString", "[", 
+                 RowBox[{"{", 
+                  RowBox[{
+                  "\"\<Day\>\"", ",", "\"\<Month\>\"", ",", "\"\<Year\>\"", 
+                   ",", "\"\<Hour\>\"", ",", "\"\<Minute\>\"", ",", 
+                   "\"\<Second\>\""}], "}"}], "]"}], "<>", "\"\<.png\>\""}]}],
+               "}"}], "]"}]}], ";", "\[IndentingNewLine]", "\t\t\t\t\t\t\t", 
+           RowBox[{"Export", "[", 
+            RowBox[{"filePath", ",", "eval"}], "]"}], ";", 
+           "\[IndentingNewLine]", "\t\t\t\t\t\t\t", 
+           RowBox[{"{", 
+            RowBox[{"True", ",", 
+             RowBox[{"BotPhotoAnswerMsg", "[", 
+              RowBox[{"msg", ",", "filePath", ",", "bot"}], "]"}]}], "}"}]}], 
+          ",", "\[IndentingNewLine]", 
+          RowBox[{"(*", 
+           RowBox[{"Otherwise", ",", " ", 
+            RowBox[{"send", " ", "the", " ", "String"}]}], "*)"}], 
+          "\[IndentingNewLine]", "_", ",", 
+          RowBox[{"{", 
+           RowBox[{"True", ",", 
+            RowBox[{"BotAnswerMsg", "[", 
+             RowBox[{"msg", ",", 
+              RowBox[{"ToString", "[", "eval", "]"}], ",", "bot"}], "]"}]}], 
+           "}"}]}], "\[IndentingNewLine]", "]"}]}]}], "\n", "  ", "]"}]}]}], 
+   "\n", "  ", "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.645182492677732*^9, 3.645182515220039*^9}, {
+   3.6563196747706013`*^9, 3.6563196779531717`*^9}, {3.656319829738084*^9, 
+   3.656319979462596*^9}, {3.656320096187086*^9, 3.656320096353552*^9}, {
+   3.6563345859730883`*^9, 3.656334742080674*^9}, {3.656334812148872*^9, 
+   3.6563348925066347`*^9}, {3.6563349229788237`*^9, 3.656334970991544*^9}, {
+   3.656335311723222*^9, 3.656335340274634*^9}, 3.656335734754581*^9, {
+   3.6563359035146713`*^9, 3.656335948287388*^9}, {3.656337867794035*^9, 
+   3.6563378720997353`*^9}, 3.6566863418819075`*^9, {3.6566866107571335`*^9, 
+   3.6566866392751713`*^9}, {3.657011245117073*^9, 3.6570113587521486`*^9}}],
+
+Cell["\<\
+Execute a shell statement (very dangerous, do not allow to strangers!)\
+\>", "Text",
+ CellChangeTimes->{{3.65701121237294*^9, 3.6570112150844417`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"CmdShell", "[", 
+   RowBox[{"msg_", ",", "bot_"}], "]"}], " ", ":=", " ", "\n", " ", 
+  RowBox[{"Block", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{
+     "fromid", ",", " ", "str", ",", " ", "msgId", ",", " ", "ret", ",", 
+      "strSplit"}], "}"}], ",", " ", "\n", "  ", 
+    RowBox[{
+     RowBox[{"fromid", " ", "=", " ", 
+      RowBox[{"JSONElement", "[", 
+       RowBox[{"msg", ",", 
+        RowBox[{"{", 
+         RowBox[{"\"\<message\>\"", ",", "\"\<from\>\"", ",", "\"\<id\>\""}], 
+         "}"}]}], "]"}]}], ";", "\n", "  ", 
+     RowBox[{"msgId", " ", "=", " ", 
+      RowBox[{"JSONElement", "[", 
+       RowBox[{"msg", ",", 
+        RowBox[{"{", 
+         RowBox[{"\"\<message\>\"", ",", "\"\<message_id\>\""}], "}"}]}], 
+       "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"strSplit", "=", 
+      RowBox[{"StringSplit", "[", 
+       RowBox[{
+        RowBox[{"JSONElement", "[", 
+         RowBox[{"msg", ",", 
+          RowBox[{"{", 
+           RowBox[{"\"\<message\>\"", ",", "\"\<text\>\""}], "}"}]}], "]"}], 
+        ",", " ", "Whitespace", ",", " ", "2"}], "]"}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"If", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{
+         RowBox[{"Length", "[", "strSplit", "]"}], "<=", "1"}], "||", 
+        RowBox[{
+         RowBox[{"strSplit", "[", 
+          RowBox[{"[", "2", "]"}], "]"}], "\[Equal]", "\"\<\>\""}]}], ",", 
+       "\[IndentingNewLine]", 
+       RowBox[{"(*", 
+        RowBox[{"No", " ", "additional", " ", "arguments", " ", "were", " ", 
+         RowBox[{"given", ".", " ", "Wait"}], " ", "thus", " ", "for", " ", 
+         RowBox[{"them", "."}]}], "*)"}], "\[IndentingNewLine]", 
+       RowBox[{"{", 
+        RowBox[{"False", ",", "Null"}], "}"}], ",", "\[IndentingNewLine]", 
+       RowBox[{"(*", 
+        RowBox[{"Otherwise", " ", "evaluate", " ", "them"}], "*)"}], 
+       "\[IndentingNewLine]", 
+       RowBox[{
+        RowBox[{"ret", " ", "=", " ", 
+         RowBox[{"RunProcess", "[", 
+          RowBox[{
+          "$SystemShell", ",", " ", "\"\<StandardOutput\>\"", ",", " ", 
+           RowBox[{"str", " ", "<>", " ", "\"\<\\nexit\\n\>\""}]}], "]"}]}], 
+        ";", "\[IndentingNewLine]", 
+        RowBox[{"(*", 
+         RowBox[{
+          RowBox[{
+          "Here", " ", "is", " ", "a", " ", "example", " ", "of", " ", 
+           "using", " ", "BotAPICall", " ", "to", " ", "do", " ", "the", " ", 
+           "same", " ", "as", " ", "BotAnswerMsg"}], ",", " ", 
+          RowBox[{
+          "manually", " ", "controlling", " ", "the", " ", "parameters"}]}], 
+         "*)"}], "\n", "  ", 
+        RowBox[{"{", 
+         RowBox[{"True", ",", 
+          RowBox[{"BotAPICall", "[", "\n", "   ", 
+           RowBox[{"\"\<sendMessage\>\"", ",", " ", 
+            RowBox[{"{", 
+             RowBox[{
+              RowBox[{"\"\<chat_id\>\"", " ", "->", " ", "fromid"}], ",", " ", 
+              RowBox[{"\"\<text\>\"", " ", "->", " ", "ret"}], ",", " ", "\n",
+               "    ", 
+              RowBox[{
+              "\"\<reply_to_message_id\>\"", " ", "->", " ", "msgId"}]}], 
+             "}"}], ",", "bot"}], "]"}]}], "}"}]}]}], "\[IndentingNewLine]", 
+      "]"}]}]}], "\n", "  ", "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.645182497358186*^9, 3.6451825169023542`*^9}, {
+  3.656319680972822*^9, 3.656319683874023*^9}, {3.6566867359460087`*^9, 
+  3.656686766892459*^9}, {3.657011374656209*^9, 3.6570114209470115`*^9}, {
+  3.6570114527325325`*^9, 3.657011548292369*^9}}],
+
+Cell["\<\
+Measure time between recieved message time and bot\[CloseCurlyQuote]s local \
+time when answering\
+\>", "Text",
+ CellChangeTimes->{{3.6570115580542345`*^9, 3.6570115829913125`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"CmdPing", "[", 
+   RowBox[{"msg_", ",", "bot_"}], "]"}], " ", ":=", " ", "\n", " ", 
+  RowBox[{"Block", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"time", ",", " ", "str", ",", " ", "msgId", ",", " ", "ret"}], 
+     "}"}], ",", " ", 
+    RowBox[{
+     RowBox[{"time", " ", "=", " ", 
+      RowBox[{"JSONElement", "[", 
+       RowBox[{"msg", ",", 
+        RowBox[{"{", 
+         RowBox[{"\"\<message\>\"", ",", "\"\<date\>\""}], "}"}]}], "]"}]}], 
+     ";", "\n", " ", 
+     RowBox[{"{", 
+      RowBox[{"True", ",", " ", 
+       RowBox[{"BotAnswerMsg", "[", 
+        RowBox[{"msg", ",", " ", 
+         RowBox[{"\"\<Pong: \>\"", " ", "<>", " ", 
+          RowBox[{"ToString", "[", 
+           RowBox[{
+            RowBox[{"UnixTime", "[", "]"}], " ", "-", " ", "time"}], "]"}], 
+          " ", "<>", " ", "\"\< s.\>\""}], ",", "bot"}], "]"}]}], "}"}]}]}], 
+   "\n", "  ", "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.645182499345283*^9, 3.645182529079928*^9}, {
+   3.656319689552237*^9, 3.656319695970866*^9}, 3.6566867925937996`*^9, 
+   3.656687447711507*^9}],
+
+Cell["Seding a random music file", "Text",
+ CellChangeTimes->{{3.65701159511817*^9, 3.657011601012191*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"CmdMusic", "[", 
+   RowBox[{"msg_", ",", "bot_"}], "]"}], " ", ":=", " ", "\n", " ", 
+  RowBox[{"Block", "[", 
+   RowBox[{
+    RowBox[{"{", "filePath", "}"}], ",", " ", 
+    RowBox[{
+     RowBox[{"filePath", "=", 
+      RowBox[{"FileNameJoin", "[", 
+       RowBox[{"{", 
+        RowBox[{"$BotTmpDir", ",", 
+         RowBox[{
+          RowBox[{"DateString", "[", 
+           RowBox[{"{", 
+            RowBox[{
+            "\"\<Day\>\"", ",", "\"\<Month\>\"", ",", "\"\<Year\>\"", ",", 
+             "\"\<Hour\>\"", ",", "\"\<Minute\>\"", ",", "\"\<Second\>\""}], 
+            "}"}], "]"}], "<>", "\"\<.mp3\>\""}]}], "}"}], "]"}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"(*", 
+      RowBox[{
+      "Generate", " ", "random", " ", "music", " ", "using", " ", "notes", 
+       " ", "in", " ", "the", " ", "Aristoxenian", " ", "scale"}], "*)"}], 
+     "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"Export", "[", 
+       RowBox[{"filePath", ",", 
+        RowBox[{"Sound", "[", 
+         RowBox[{
+          RowBox[{
+           RowBox[{"Play", "[", 
+            RowBox[{
+             RowBox[{"Sin", "[", 
+              RowBox[{"#", " ", "2", "Pi", " ", "t"}], "]"}], ",", 
+             RowBox[{"{", 
+              RowBox[{"t", ",", "0", ",", "0.5"}], "}"}], ",", 
+             RowBox[{"SampleRate", "\[Rule]", "2000"}]}], "]"}], "&"}], "/@", 
+          
+          RowBox[{"RandomChoice", "[", 
+           RowBox[{
+            RowBox[{"(", 
+             RowBox[{
+              RowBox[{"{", 
+               RowBox[{"1", ",", 
+                RowBox[{"9", "/", "8"}], ",", 
+                RowBox[{"5", "/", "4"}], ",", 
+                RowBox[{"4", "/", "3"}], ",", 
+                RowBox[{"3", "/", "2"}], ",", 
+                RowBox[{"5", "/", "3"}], ",", 
+                RowBox[{"15", "/", "8"}], ",", 
+                RowBox[{"2", "/", "1"}]}], "}"}], "*", "440", "*", 
+              RowBox[{"3", "/", "5"}]}], ")"}], ",", "20"}], "]"}]}], "]"}]}],
+        "]"}], "\n", " ", 
+      RowBox[{"{", 
+       RowBox[{"True", ",", " ", 
+        RowBox[{"BotAudioAnswerMsg", "[", 
+         RowBox[{"msg", ",", " ", "filePath", ",", "bot"}], "]"}]}], 
+       "}"}]}]}]}], "\n", "  ", "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.656337253295973*^9, 3.656337400499175*^9}, 
+   3.6566863339127254`*^9, {3.656686849399725*^9, 3.6566868608964014`*^9}, {
+   3.656686891095563*^9, 3.6566869215378847`*^9}, {3.6566873662591286`*^9, 
+   3.6566874131174135`*^9}, {3.6566874527658825`*^9, 3.656687490203952*^9}, {
+   3.6566875247490826`*^9, 3.656687526723403*^9}, {3.656687591362341*^9, 
+   3.656687593337661*^9}}],
+
+Cell["Setting an example custom keyboard", "Text",
+ CellChangeTimes->{{3.6570119344370584`*^9, 3.6570119428994913`*^9}, 
+   3.6570262669905906`*^9, {3.657030455642226*^9, 3.6570304635257154`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"CmdCustomKb", "[", 
+   RowBox[{"msg_", ",", "bot_"}], "]"}], " ", ":=", " ", "\n", " ", 
+  RowBox[{"Block", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{
+     "fromid", ",", " ", "strSplit", ",", "msgId", ",", "eval", ",", 
+      "filePath"}], "}"}], ",", " ", 
+    RowBox[{
+     RowBox[{"fromid", " ", "=", " ", 
+      RowBox[{"JSONElement", "[", 
+       RowBox[{"msg", ",", 
+        RowBox[{"{", 
+         RowBox[{"\"\<message\>\"", ",", "\"\<from\>\"", ",", "\"\<id\>\""}], 
+         "}"}]}], "]"}]}], ";", "\n", "  ", 
+     RowBox[{"msgId", " ", "=", " ", 
+      RowBox[{"JSONElement", "[", 
+       RowBox[{"msg", ",", 
+        RowBox[{"{", 
+         RowBox[{"\"\<message\>\"", ",", "\"\<message_id\>\""}], "}"}]}], 
+       "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"strSplit", "=", 
+      RowBox[{"StringSplit", "[", 
+       RowBox[{
+        RowBox[{"JSONElement", "[", 
+         RowBox[{"msg", ",", 
+          RowBox[{"{", 
+           RowBox[{"\"\<message\>\"", ",", "\"\<text\>\""}], "}"}]}], "]"}], 
+        ",", " ", "Whitespace", ",", " ", "2"}], "]"}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"{", 
+      RowBox[{"True", ",", 
+       RowBox[{"BotAPICall", "[", " ", 
+        RowBox[{"\"\<sendMessage\>\"", ",", " ", 
+         RowBox[{"{", 
+          RowBox[{
+           RowBox[{"\"\<chat_id\>\"", " ", "->", " ", "fromid"}], ",", " ", 
+           RowBox[{
+           "\"\<text\>\"", " ", "->", " ", 
+            "\"\<A nice demo keyboard for you :)\>\""}], ",", "    ", 
+           RowBox[{"\"\<reply_to_message_id\>\"", " ", "->", " ", "msgId"}], 
+           ",", 
+           RowBox[{"\"\<reply_markup\>\"", "\[Rule]", 
+            RowBox[{"BotPrepareKeyboard", "[", 
+             RowBox[{"{", 
+              RowBox[{
+               RowBox[{"{", 
+                RowBox[{
+                "\"\</whoami\>\"", ",", "\"\</ping\>\"", ",", 
+                 "\"\</shell pwd\>\""}], "}"}], ",", 
+               RowBox[{"{", 
+                RowBox[{
+                "\"\</wolfram N[Pi,50]\>\"", ",", 
+                 "\"\</wolfram Plot[Erf[x],{x,-2,2}]\>\"", ",", 
+                 "\"\</wolfram Rasterize[Integrate[Log[x]*Sqrt[x],x]]\>\""}], 
+                "}"}], ",", 
+               RowBox[{"{", "\"\</music\>\"", "}"}], ",", 
+               RowBox[{"{", "\"\<I love you, Telegram bot <3\>\"", "}"}]}], 
+              "}"}], "]"}]}]}], "}"}], ",", "bot"}], "]"}]}], "}"}]}]}], "\n",
+    "  ", "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.6570119663810663`*^9, 3.6570119933659787`*^9}, {
+   3.657012032345574*^9, 3.6570120564232516`*^9}, 3.6570121290789404`*^9, {
+   3.657012807249124*^9, 3.6570128093695397`*^9}, {3.6570128857491693`*^9, 
+   3.65701291965403*^9}, 3.657026262761121*^9, {3.6570263079793425`*^9, 
+   3.657026321302433*^9}, 3.657027246211999*^9, {3.65702853018579*^9, 
+   3.6570285307904367`*^9}, {3.6570285758197155`*^9, 3.657028685639141*^9}, {
+   3.6570288410832915`*^9, 3.657028917930545*^9}, 3.6570290251293893`*^9, {
+   3.657029109449693*^9, 3.6570291218750496`*^9}, {3.6570292071839533`*^9, 
+   3.6570292077543073`*^9}}],
+
+Cell["\<\
+At the moment, the bot calls package provided functions BotErrorNoCmd, \
+BotErrorUnknownCmd, BotErrorUnprivilegedCmd when errors occur.
+You can override them at will.\
+\>", "Text",
+ CellChangeTimes->{{3.6570117387648335`*^9, 3.657011810962125*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"?", "BotErrorNoCmd"}]], "Input",
+ CellChangeTimes->{{3.6570117932727*^9, 3.657011795136031*^9}}],
+
+Cell[BoxData[
+ StyleBox["\<\"BotErrorNoCmd[msg, bot] is called by ProcessMessage to answer \
+a non-command message. Override if needed.\"\>", "MSG"]], "Print", \
+"PrintUsage",
+ CellChangeTimes->{3.657057868244723*^9},
+ CellTags->"Info-1326764c-2fcd-4d61-9e6e-a1cbf70a3242"]
+}, Open  ]],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"BotErrorNoCmd", "[", 
+   RowBox[{"msg_", ",", "bot_"}], "]"}], ":=", 
+  RowBox[{"{", 
+   RowBox[{"True", ",", 
+    RowBox[{"BotAnswerMsg", "[", 
+     RowBox[{
+     "msg", ",", "\"\<I'd love to talk, but I don't know how to do it!\>\"", 
+      ",", "bot"}], "]"}]}], "}"}]}]], "Input",
+ CellChangeTimes->{{3.657024919022272*^9, 3.657024966353577*^9}}],
+
+Cell["\<\
+You can also override BotLog to change the way to see debug error (or supress \
+them)\
+\>", "Text",
+ CellChangeTimes->{{3.6570255308567715`*^9, 3.657025541524131*^9}, {
+  3.657025855840708*^9, 3.657025865608713*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"?", "BotLog"}]], "Input",
+ CellChangeTimes->{{3.6570255495545797`*^9, 3.6570255514296927`*^9}}],
+
+Cell[BoxData[
+ StyleBox["\<\"BotLog[string] is called to register events for debug \
+purposes. By default calls Print. Override at will.\"\>", "MSG"]], "Print", \
+"PrintUsage",
+ CellChangeTimes->{3.657057868322852*^9},
+ CellTags->"Info-3a6472fd-8c07-4806-9352-17ff25233472"]
+}, Open  ]],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"BotLog", "[", "str_", "]"}], ":=", 
+  RowBox[{"Print", "[", 
+   RowBox[{
+    RowBox[{"DateString", "[", "]"}], "<>", "\"\<: \>\"", "<>", "str"}], 
+   "]"}]}]], "Input",
+ CellChangeTimes->{{3.657025556543872*^9, 3.657025597588689*^9}, {
+  3.6570256431603565`*^9, 3.657025672019946*^9}, {3.6570258367813287`*^9, 
+  3.6570258413857756`*^9}, {3.6570273110303645`*^9, 3.657027311708194*^9}}],
+
+Cell["\<\
+Example of manually calling an API. Test this to see if your token works.\
+\>", "Text",
+ CellChangeTimes->{{3.656688857816819*^9, 3.6566888640089273`*^9}, {
+  3.6570319007595053`*^9, 3.657031917209882*^9}}],
+
+Cell[BoxData[
+ RowBox[{"BotAPICall", "[", 
+  RowBox[{"\"\<getUpdates\>\"", ",", 
+   RowBox[{"{", "}"}], ",", 
+   RowBox[{"Import", "[", 
+    RowBox[{"$BotConfigFile", ",", "\"\<JSON\>\""}], "]"}]}], "]"}]], "Input",\
+
+ CellChangeTimes->{{3.645181566079171*^9, 3.6451815708809347`*^9}, {
+  3.645181628694121*^9, 3.645181631585951*^9}, {3.65668634733532*^9, 
+  3.6566863476946926`*^9}, {3.65668882155822*^9, 3.6566888315298433`*^9}}],
+
+Cell["\<\
+To start the bot call BotStart. To stop it abort the evaluation.\
+\>", "Text",
+ CellChangeTimes->{{3.6570116245217743`*^9, 3.6570116268031607`*^9}, {
+  3.6570577970694704`*^9, 3.657057849905917*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"?", "BotStart"}]], "Input",
+ CellChangeTimes->{3.6570116310056734`*^9}],
+
+Cell[BoxData[
+ StyleBox["\<\"BotStart[pollTime, bot, BotCmdList] starts a bot with given \
+command, polling updates in given time.\"\>", "MSG"]], "Print", "PrintUsage",
+ CellChangeTimes->{3.657057870604221*^9},
+ CellTags->"Info-9b376e0d-a2dc-458d-9a99-ae37e6a5e1a3"]
+}, Open  ]],
+
+Cell[BoxData[
+ RowBox[{"BotStart", "[", 
+  RowBox[{"5", ",", " ", "$BotConfigFile", ",", " ", "$BotCmdList"}], 
+  "]"}]], "Input",
+ CellChangeTimes->{{3.645088603613105*^9, 3.645088605126699*^9}, 
+   3.645351721981565*^9, {3.646114874606656*^9, 3.6461148758560457`*^9}, 
+   3.656688413148336*^9, {3.657029188780573*^9, 3.6570291895839643`*^9}}]
+}, Open  ]]
+},
+WindowSize->{1350, 685},
+WindowMargins->{{-8, Automatic}, {Automatic, 0}},
+FrontEndVersion->"10.3 for Microsoft Windows (64-bit) (October 9, 2015)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{
+ "Info-ac1aa10b-6545-41ab-931a-8b9347671348"->{
+  Cell[9454, 225, 248, 4, 40, "Print",
+   CellTags->"Info-ac1aa10b-6545-41ab-931a-8b9347671348"]},
+ "Info-1326764c-2fcd-4d61-9e6e-a1cbf70a3242"->{
+  Cell[28197, 682, 273, 5, 40, "Print",
+   CellTags->"Info-1326764c-2fcd-4d61-9e6e-a1cbf70a3242"]},
+ "Info-3a6472fd-8c07-4806-9352-17ff25233472"->{
+  Cell[29246, 715, 274, 5, 40, "Print",
+   CellTags->"Info-3a6472fd-8c07-4806-9352-17ff25233472"]},
+ "Info-9b376e0d-a2dc-458d-9a99-ae37e6a5e1a3"->{
+  Cell[30944, 763, 266, 4, 40, "Print",
+   CellTags->"Info-9b376e0d-a2dc-458d-9a99-ae37e6a5e1a3"]}
+ }
+*)
+(*CellTagsIndex
+CellTagsIndex->{
+ {"Info-ac1aa10b-6545-41ab-931a-8b9347671348", 31912, 789},
+ {"Info-1326764c-2fcd-4d61-9e6e-a1cbf70a3242", 32059, 792},
+ {"Info-3a6472fd-8c07-4806-9352-17ff25233472", 32207, 795},
+ {"Info-9b376e0d-a2dc-458d-9a99-ae37e6a5e1a3", 32355, 798}
+ }
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[580, 22, 113, 1, 63, "Section"],
+Cell[696, 25, 532, 15, 30, "Text"],
+Cell[1231, 42, 219, 4, 31, "Input",
+ InitializationCell->True],
+Cell[1453, 48, 127, 1, 30, "Text"],
+Cell[1583, 51, 566, 12, 31, "Input",
+ InitializationCell->True],
+Cell[2152, 65, 172, 2, 30, "Text"],
+Cell[2327, 69, 347, 9, 31, "Input",
+ InitializationCell->True],
+Cell[2677, 80, 1148, 20, 239, "Text"],
+Cell[3828, 102, 2114, 41, 220, "Text"],
+Cell[5945, 145, 1975, 34, 239, "Text"],
+Cell[7923, 181, 1179, 29, 52, "Input",
+ InitializationCell->True],
+Cell[9105, 212, 201, 5, 49, "Text"],
+Cell[CellGroupData[{
+Cell[9331, 221, 120, 2, 31, "Input"],
+Cell[9454, 225, 248, 4, 40, "Print",
+ CellTags->"Info-ac1aa10b-6545-41ab-931a-8b9347671348"]
+}, Open  ]],
+Cell[9717, 232, 131, 1, 30, "Text"],
+Cell[9851, 235, 1901, 44, 212, "Input",
+ InitializationCell->True],
+Cell[11755, 281, 163, 3, 30, "Text"],
+Cell[11921, 286, 4731, 107, 372, "Input",
+ InitializationCell->True],
+Cell[16655, 395, 161, 3, 30, "Text"],
+Cell[16819, 400, 3534, 83, 332, "Input",
+ InitializationCell->True],
+Cell[20356, 485, 191, 4, 30, "Text"],
+Cell[20550, 491, 1122, 29, 92, "Input",
+ InitializationCell->True],
+Cell[21675, 522, 107, 1, 30, "Text"],
+Cell[21785, 525, 2668, 65, 132, "Input",
+ InitializationCell->True],
+Cell[24456, 592, 196, 2, 30, "Text"],
+Cell[24655, 596, 3133, 71, 192, "Input",
+ InitializationCell->True],
+Cell[27791, 669, 258, 5, 49, "Text"],
+Cell[CellGroupData[{
+Cell[28074, 678, 120, 2, 31, "Input"],
+Cell[28197, 682, 273, 5, 40, "Print",
+ CellTags->"Info-1326764c-2fcd-4d61-9e6e-a1cbf70a3242"]
+}, Open  ]],
+Cell[28485, 690, 385, 10, 31, "Input"],
+Cell[28873, 702, 226, 5, 30, "Text"],
+Cell[CellGroupData[{
+Cell[29124, 711, 119, 2, 31, "Input"],
+Cell[29246, 715, 274, 5, 40, "Print",
+ CellTags->"Info-3a6472fd-8c07-4806-9352-17ff25233472"]
+}, Open  ]],
+Cell[29535, 723, 421, 9, 31, "Input"],
+Cell[29959, 734, 216, 4, 30, "Text"],
+Cell[30178, 740, 431, 9, 31, "Input"],
+Cell[30612, 751, 209, 4, 30, "Text"],
+Cell[CellGroupData[{
+Cell[30846, 759, 95, 2, 31, "Input"],
+Cell[30944, 763, 266, 4, 40, "Print",
+ CellTags->"Info-9b376e0d-a2dc-458d-9a99-ae37e6a5e1a3"]
+}, Open  ]],
+Cell[31225, 770, 344, 6, 31, "Input"]
+}, Open  ]]
+}
+]
+*)
+
+(* End of internal cache information *)
