@@ -54,7 +54,7 @@ If[$VersionNumber < 10.0,
 URLQueryEncode[strMatrix_] := 
  StringJoin@
   Riffle[StringJoin[#[[1]], "=", #[[2]]] & /@ 
-    Map[StringReplace[#, {" " -> "+", "!" -> "%21", "#" -> "%22", 
+    Map[StringReplace[ToString[#], {" " -> "+", "!" -> "%21", "#" -> "%22", 
         "$" -> "%24", "&" -> "%26", "'" -> "%27", "(" -> "%28", 
         ")" -> "%29", "*" -> "%2A", "+" -> "%2B", "," -> "%2C", 
         "/" -> "%2F", ":" -> "%3A", ";" -> "%3B", "=" -> "%3D", 
@@ -82,8 +82,11 @@ BotFileAPICall[method_String, args_List, filePath_String,fileField_String,bot_] 
                "",
                "?" <> URLQueryEncode[args]
            ];
+        If[$VersionNumber<10.0,
+        BotLog["ERROR: BotFileAPICall does not work in v < 10.0."]	,
         (*Original idea taken from http://mathematica.stackexchange.com/questions/52338/more-complete-mutipartdata-posts-using-urlfetch *)
         URLExecute[url,{},"JSON","Method"->"POST","MultipartElements"->{{fileField<>"\"; filename=\""<>filename,"application/octet-stream",bytes}},"Headers"->{"Accept"->"application/json; charset=UTF-8","Content-Type"->"multipart/form-data"}]
+        ]
     ]
 
 BotAnswerMsg[msg_, txt_String, bot_] :=
@@ -113,7 +116,7 @@ BotAudioAnswerMsg[msg_, filePath_String, bot_] :=
           "reply_to_message_id" -> msgId},filePath ,"audio",bot]
     ]
 
-BotPrepareKeyboard[strMatrix_] := "{\"keyboard\":" <> StringReplace[ExportString[strMatrix, "RawJSON"], {"\n" -> "", "\t" -> ""}] <> "}"
+BotPrepareKeyboard[strMatrix_] := "{\"keyboard\":" <> StringReplace[ExportString[strMatrix, "JSON"], {"\n" -> "", "\t" -> ""}] <> "}"
 
 ProcessMessage::usage="ProcessMessage[msg, bot, BotCmdList] makes the bot automatically process a message with the rules given in BotCmdList.";
 ProcessMessage[msg_, bot_, BotCmdList_] :=
