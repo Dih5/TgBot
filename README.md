@@ -28,8 +28,8 @@ Check the following example:
 
 ![alt tag](https://raw.github.com/dih5/TgBot/master/demo.png)
 
-This bot is done using [the example notebook](https://raw.githubusercontent.com/dih5/TgBot/master/TgBotDemo.nb) in this project.
-Check out that notebook to see how the package is used.
+This bot is done using [the example notebook](https://raw.githubusercontent.com/dih5/TgBot/master/demos/TgBotDemo.nb) in this project.
+Check out that notebook to see how the package is used. If you are only interested in sending a message to an user, you may check a [simpler demo](https://raw.githubusercontent.com/dih5/TgBot/master/demos/SendMessageExample.nb) instead
 
 ## Installation
 

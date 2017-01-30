@@ -72,7 +72,7 @@ paste the following in the path selected by $BotConfigFile:\n\n{\n    \
 \[OpenCurlyDoubleQuote]FriendList\[CloseCurlyDoubleQuote]: [ ],\n    \
 \[OpenCurlyDoubleQuote]Token\[CloseCurlyDoubleQuote]: \
 \[OpenCurlyDoubleQuote]PasteYourTokenHere\[CloseCurlyDoubleQuote],\n    \
-\[OpenCurlyDoubleQuote]MasterList\[CloseCurlyDoubleQuote]: [    ],\n    \
+\[OpenCurlyDoubleQuote]MasterList\[CloseCurlyDoubleQuote]: [ ],\n    \
 \[OpenCurlyDoubleQuote]LastAnswered\[CloseCurlyDoubleQuote]: 1,\n    \
 \[OpenCurlyDoubleQuote]ErrorNoCmd\[CloseCurlyDoubleQuote]: \
 \[OpenCurlyDoubleQuote]Please, send me a command.\[CloseCurlyDoubleQuote],\n  \
@@ -101,10 +101,10 @@ Cell[TextData[{
  " is a list of integers identifying the users allowed to call any command \
 (privilege 2). Might be empty []. Later you\[CloseCurlyQuote]d probably like \
 to enter your user id in the MasterList. You can check it when the bot \
-recieves your messages.\n",
+receives your messages.\n",
  StyleBox["FriendList",
   FontSlant->"Italic"],
- " is a list of integers identyfing the users allowed to call some commands \
+ " is a list of integers identifying the users allowed to call some commands \
 (privilege 1). Might be empty [].\nAny user out of these lists will be \
 assigned privilege 0.\nIf no risky command is allowed you may leave those \
 empty and allow every user to execute any command.\n",
@@ -114,7 +114,7 @@ empty and allow every user to execute any command.\n",
 in the servers up to 24 hours, this is used to avoid answering multiple times \
 when restarting the bot.\nBEWARE: as such integer will eventually overflow \
 the bot will stop answering when that happens. Manually change the parameter \
-in the config file to 1 when that happens.\n\nAppart from that, you can store \
+in the config file to 1 when that happens.\n\nApart from that, you can store \
 any option in the config file. The sample file shows 3 strings, which are \
 read by some default functions in the package."
 }], "Text"],
@@ -131,24 +131,24 @@ should correspond to the ones registered in the bot (see ",
   ButtonData->{
     URL["https://core.telegram.org/bots#edit-settings"], None},
   ButtonNote->"https://core.telegram.org/bots#edit-settings"],
- "), but it is not mandatory.\n2 - An element of {0, 1, 2} refering to the \
+ "), but it is not mandatory.\n2 - An element of {0, 1, 2} referring to the \
 minimum privilege needed to execute the command. 0 = anyone, 1 = friends, 2 = \
 masters.\n3 - The ",
  StyleBox["Mathematica",
   FontSlant->"Italic"],
- " function associated with the command.\n     These functions recieve two \
+ " function associated with the command.\n     These functions receive two \
 JSON arguments: the message that initiated the call and the bot itself.\n     \
 They MUST return a list of elements:\n     \ti) A boolean value indicating if \
 the message was considered complete or not. If # === False, the bot \
 understands the command is not completed yet. The next message will be \
-preprocesed to have the command added. This is useful for mobile interfaces, \
+preprocessed to have the command added. This is useful for mobile interfaces, \
 where the command is selected from a list. It can also be used to set up a \
 ReplyKeyboard. Any other value from False is understood as completed.\n     \t\
-ii) An object representing the result of the API called to anser the message. \
-Package provided functions like BotAnswerMsg return appropiate JSON objects \
-or $Failed if failed. This object is used to decide wheter to retry API \
-calling if failed (e.g., due to internet connection lost) and to update \
-LastAnswered if succeded."
+ii) An object representing the result of the API called to answer the \
+message. Package provided functions like BotAnswerMsg return appropriate JSON \
+objects or $Failed if failed. This object is used to decide whether to retry \
+API calling if failed (e.g., due to internet connection lost) and to update \
+LastAnswered if succeeded."
 }], "Text"],
 
 Cell[BoxData[
@@ -418,7 +418,7 @@ Cell[BoxData[
  InitializationCell->True],
 
 Cell["\<\
-Measure time between recieved message time and bot\[CloseCurlyQuote]s local \
+Measure time between received message time and bot\[CloseCurlyQuote]s local \
 time when answering\
 \>", "Text"],
 
@@ -612,8 +612,8 @@ Cell[BoxData[
  InitializationCell->True],
 
 Cell["\<\
-You can also override BotLog to change the way to see debug error (or supress \
-them)\
+You can also override BotLog to change the way to see debug error (or \
+suppress them)\
 \>", "Text"],
 
 Cell[BoxData[
@@ -650,7 +650,7 @@ WindowSize->{1350, 685},
 WindowMargins->{{-8, Automatic}, {Automatic, 0}},
 PrivateNotebookOptions->{"FileOutlineCache"->False},
 TrackCellChangeTimes->False,
-FrontEndVersion->"10.3 for Microsoft Windows (64-bit) (October 9, 2015)",
+FrontEndVersion->"11.0 for Microsoft Windows (64-bit) (July 28, 2016)",
 StyleDefinitions->"Default.nb"
 ]
 

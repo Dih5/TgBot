@@ -1,0 +1,164 @@
+Notebook[{
+
+Cell[CellGroupData[{
+Cell["Minimal send message demo", "Section"],
+
+Cell["\<\
+This tutorial explains how to send a message using the API. There is another \
+full tutorial available on deploying a bot.\
+\>", "Text"],
+
+Cell[TextData[{
+ "If you are new to Telegram bots first check the ",
+ ButtonBox["introduction to bots",
+  BaseStyle->"Hyperlink",
+  ButtonData->{
+    URL["https://core.telegram.org/bots"], None},
+  ButtonNote->"https://core.telegram.org/bots"],
+ " and take a general look to the ",
+ ButtonBox["introduction to the bot API",
+  BaseStyle->"Hyperlink",
+  ButtonData->{
+    URL["https://core.telegram.org/bots/api"], None},
+  ButtonNote->"https://core.telegram.org/bots/api"],
+ ". To run this example you will need the ",
+ StyleBox["Token",
+  FontSlant->"Italic"],
+ " authenticating your bot (see ",
+ ButtonBox["here",
+  BaseStyle->"Hyperlink",
+  ButtonData->{
+    URL["https://core.telegram.org/bots/api#authorizing-your-bot"], None},
+  ButtonNote->"https://core.telegram.org/bots/api#authorizing-your-bot"],
+ "). Get it, you will use it below!"
+}], "Text"],
+
+Cell["\<\
+If you haven\[CloseCurlyQuote]t installed the package you may call either the \
+automated install with:\
+\>", "Text"],
+
+Cell[BoxData[
+ RowBox[{"Get", "[", 
+  "\"\<https://raw.githubusercontent.com/dih5/TgBot/master/BootstrapInstall.m\
+\>\"", "]"}]], "Input"],
+
+Cell["Or temporary use the online version with:", "Text"],
+
+Cell[BoxData[
+ RowBox[{"Get", "[", 
+  "\"\<https://raw.githubusercontent.com/dih5/TgBot/master/TgBot/TgBot.m\>\"",
+   "]"}]], "Input"],
+
+Cell["Regardless of what you did, load the package now with", "Text"],
+
+Cell[BoxData[
+ RowBox[{"Needs", "[", "\"\<TgBot`\>\"", "]"}]], "Input",
+ InitializationCell->True],
+
+Cell["\<\
+You can check the package provided functions with ?. The basic function is \
+BotAPICall\
+\>", "Text"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"?", "BotAPICall"}]], "Input"],
+
+Cell[BoxData[
+ StyleBox["\<\"BotAPICall[method, args, bot] makes the bot call a method with \
+given parameters.\"\>", "MSG"]], "Print", "PrintUsage",
+ CellTags->"Info83694797618-4227251"]
+}, Open  ]],
+
+Cell[TextData[{
+ "It takes three arguments: the method to call, the args to us for this call, \
+and a description of your bot in a dictionary style. Full bots are suggested \
+to keep this in a separate file, but it needn\[CloseCurlyQuote]t be so.\nAs \
+an example we will call the getUpdates method with no arguments. The only \
+relevant part of the bot description is the Token, which you ",
+ StyleBox["must paste below",
+  FontWeight->"Bold"],
+ "."
+}], "Text"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"BotAPICall", "[", 
+  RowBox[{"\"\<getUpdates\>\"", ",", 
+   RowBox[{"{", "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"\"\<Token\>\"", "\[Rule]", "\"\<PasteYourTokenHere\>\""}], 
+    "}"}]}], "]"}]], "Input"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "FetchURL","httperr",
+   "\"The request to URL \
+\\!\\(\\*RowBox[{\\\"\\\\\\\"https://api.telegram.org/botPasteYourTokenHere/\
+getUpdates\\\\\\\"\\\"}]\\) was not successful. The server returned the HTTP \
+status code \\!\\(\\*RowBox[{\\\"\\\\\\\"404 (\\\\\\\\\\\\\\\"Not Found\\\\\\\
+\\\\\\\\\")\\\\\\\"\\\"}]\\).\"",2,6,5,30884572433622878929,"Local"},
+  "MessageTemplate"]], "Message", "MSG"],
+
+Cell[BoxData["$Failed"], "Output"]
+}, Open  ]],
+
+Cell["\<\
+If the call succeeded you will see an object returned by the call. The first \
+item should be \[OpenCurlyDoubleQuote]ok\[CloseCurlyDoubleQuote] -> True, \
+which means the Telegram servers processed it. If this failed probably the \
+token is wrong or you have network connection issues.
+The second argument should be \[OpenCurlyDoubleQuote]result\
+\[CloseCurlyDoubleQuote] -> {(something)}. If there is nothing in brackets it \
+means your bot has not recently received any message. Otherwise you should \
+see some info there. Try to talk to your bot and check how this changes. Note \
+messages are deleted when they are around 24h old.\
+\>", "Text"],
+
+Cell[TextData[{
+ "You can use the output above to find your user ID (yours, not your bot\
+\[CloseCurlyQuote]s). An example of sending a message to a user follows, \
+where you ",
+ StyleBox["must replace 100000000 by your user ID as well as the token",
+  FontWeight->"Bold"],
+ ":"
+}], "Text"],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"result", "=", 
+   RowBox[{"Block", "[", 
+    RowBox[{
+     RowBox[{"{", "}"}], ",", 
+     RowBox[{
+      RowBox[{"Pause", "[", "1", "]"}], ";", 
+      RowBox[{"(*", 
+       RowBox[{
+       "This", " ", "is", " ", "a", " ", "heavy", " ", "computation"}], 
+       "*)"}], ";", 
+      RowBox[{"Pause", "[", "1", "]"}], ";", 
+      RowBox[{"2", "+", "2"}]}]}], "]"}]}], ";"}], "\n", 
+ RowBox[{"BotAPICall", "[", 
+  RowBox[{"\"\<sendMessage\>\"", ",", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"\"\<chat_id\>\"", "\[Rule]", "100000000"}], ",", 
+     RowBox[{"\"\<text\>\"", "\[Rule]", 
+      RowBox[{"\"\<Finished calculations. Result found was:\\n\>\"", "<>", 
+       RowBox[{"ToString", "[", "result", "]"}]}]}]}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"\"\<Token\>\"", "\[Rule]", "\"\<PasteYourTokenHere\>\""}], 
+    "}"}]}], "]"}]}], "Input"]
+}, Open  ]]
+},
+WindowSize->{1350, 685},
+WindowMargins->{{-8, Automatic}, {Automatic, 0}},
+PrivateNotebookOptions->{"FileOutlineCache"->False},
+TrackCellChangeTimes->False,
+FrontEndVersion->"11.0 for Microsoft Windows (64-bit) (July 28, 2016)",
+StyleDefinitions->"Default.nb"
+]
+
