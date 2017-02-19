@@ -1,0 +1,9 @@
+{
+    "Token": "PASTE YOUR TOKEN HERE",
+    "FriendList": [ ],
+    "LastAnswered": 1,
+    "MasterList": [ ],
+    "ErrorNoCmd": "Please, send me a command.",
+    "ErrorUnprivilegedCmd": "You are not allowed to do that.",
+    "ErrorUnknownCmd": "I do not know such a command."
+}

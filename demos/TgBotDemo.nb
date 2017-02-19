@@ -48,19 +48,36 @@ Cell[BoxData[
    RowBox[{"FileNameJoin", "[", 
     RowBox[{"{", 
      RowBox[{
-     "$HomeDirectory", ",", "\"\<tgbot\>\"", ",", "\"\<demo.json\>\""}], 
+      RowBox[{"NotebookDirectory", "[", "]"}], ",", "\"\<demo.json\>\""}], 
      "}"}], "]"}]}], ";"}]], "Input",
  InitializationCell->True],
 
-Cell["Path to a temp directory used by the bot", "Text"],
+Cell[TextData[{
+ "Path to a temp directory used by the bot. Note this directory ",
+ StyleBox["must exist",
+  FontWeight->"Bold"],
+ "."
+}], "Text"],
 
-Cell[BoxData[
+Cell[BoxData[{
  RowBox[{
   RowBox[{"$BotTmpDir", " ", "=", " ", 
    RowBox[{"FileNameJoin", "[", 
     RowBox[{"{", 
-     RowBox[{"$HomeDirectory", ",", "\"\<tgbot\>\"", ",", "\"\<tmp\>\""}], 
-     "}"}], "]"}]}], ";"}]], "Input",
+     RowBox[{
+      RowBox[{"NotebookDirectory", "[", "]"}], ",", "\"\<tmp\>\""}], "}"}], 
+    "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"If", "[", 
+    RowBox[{
+     RowBox[{"Not", "[", 
+      RowBox[{"FileExistsQ", "[", "$BotTmpDir", "]"}], "]"}], ",", 
+     RowBox[{"CreateDirectory", "[", "$BotTmpDir", "]"}]}], "]"}], ";"}], " ", 
+  RowBox[{"(*", 
+   RowBox[{
+   "Try", " ", "to", " ", "create", " ", "the", " ", "folder", " ", "if", " ",
+     "it", " ", "does", " ", "not", " ", "exist"}], "*)"}]}]}], "Input",
  InitializationCell->True],
 
 Cell[TextData[{
@@ -488,6 +505,7 @@ Cell[BoxData[
              RowBox[{"{", 
               RowBox[{"t", ",", "0", ",", "0.5"}], "}"}], ",", 
              RowBox[{"SampleRate", "\[Rule]", "2000"}]}], "]"}], "&"}], "/@", 
+          
           RowBox[{"RandomChoice", "[", 
            RowBox[{
             RowBox[{"(", 
@@ -642,15 +660,15 @@ To start the bot call BotStart. To stop it abort the evaluation.\
 
 Cell[BoxData[
  RowBox[{"BotStart", "[", 
-  RowBox[{"5", ",", " ", "$BotConfigFile", ",", " ", "$BotCmdList"}], 
+  RowBox[{"2", ",", " ", "$BotConfigFile", ",", " ", "$BotCmdList"}], 
   "]"}]], "Input"]
 }, Open  ]]
 },
-WindowSize->{1350, 685},
-WindowMargins->{{-8, Automatic}, {Automatic, 0}},
+WindowSize->{1364, 685},
+WindowMargins->{{182, Automatic}, {Automatic, 130}},
 PrivateNotebookOptions->{"FileOutlineCache"->False},
 TrackCellChangeTimes->False,
-FrontEndVersion->"11.0 for Microsoft Windows (64-bit) (July 28, 2016)",
+FrontEndVersion->"11.0 for Linux x86 (64-bit) (September 21, 2016)",
 StyleDefinitions->"Default.nb"
 ]
 
