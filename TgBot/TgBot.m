@@ -26,10 +26,9 @@ Begin["`Private`"]
 
 $CharacterEncoding = "UTF-8";
 
-JSONElement::usage="JSONElement[json, {a_1,a_2,...,a_n}] gets the element a_n in element a_n-1... in element a_1 in the given json object.";
-(*TODO: Handle errors*)
-JSONElement[json_, lst_List] := Fold[#2 /. #1 &, json, lst]
-JSONElement[json_, s_String] := s /. json
+JSONElement::usage="JSONElement[json, {a_1,a_2,...,a_n}] gets the element a_n in element a_n-1... in element a_1 in the given json object. Returns Null if not found";
+JSONElement[json_, lst_List] := Fold[If[MemberQ[#1, #2 -> _], #2 /. #1, Null] &, json, lst]
+JSONElement[json_, s_String] := JSONElement[json, {s}]
 
 
 (*Temporal storage for unfinished commands.
