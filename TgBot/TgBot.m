@@ -6,6 +6,9 @@ BotFileAPICall::usage="BotFileAPICall[method, args, filePath,fileField,bot] work
 BotStart::usage="BotStart[pollTime, bot, botCmdList] starts a bot with the typical command/answer cycle. The commands are given by botCmdList, and updates being check every pollTime.";
 
 (*Overridable methods*)
+BotProcessLocation::usage="BotProcessLocation[msg, bot] is called by BotStart when a location info is sent. By default it stores it in the BotUserLocation variable. Override if the method if needed."
+BotUserLocation::usage="A list relating usr_ids and their locations by the default behavior of BotLocation."
+
 BotErrorNoCmd::usage="BotErrorNoCmd[msg, bot] is called by BotStart to answer a non-command message. Override if needed.";
 BotErrorUnknownCmd::usage="BotErrorUnknownCmd[msg, bot] is called by BotStart to answer an unknown command message. Override if needed.";
 BotErrorUnprivilegedCmd::usage="BotErrorUnprivilegedCmd[msg, bot] is called by BotStart to answer a command message beyond the user's privilege. Override if needed.";
@@ -19,14 +22,13 @@ BotAudioAnswerMsg::usage="BotAudioAnswerMsg[msg, filePath, bot] makes the bot an
 (*Useful tools*)
 BotPrepareKeyboard::usage="BotPrepareKeyboard[strMatrix], where strMatrix is a 2D matrix of strings, prepares the serialized object representing a custom keyboard";
 BotUserPrivilege::usage="BotUserPrivilege[usrId, bot] returns 0 if usrId is not registered as friend, 1 if so, and 2 if admin.";
-
+JSONElement::usage="JSONElement[json, {a_1,a_2,...,a_n}] gets the element a_n in element a_n-1... in element a_1 in the given json object. Returns Null if not found";
 
 Begin["`Private`"]
 (* Implementation of the package *)
 
 $CharacterEncoding = "UTF-8";
 
-JSONElement::usage="JSONElement[json, {a_1,a_2,...,a_n}] gets the element a_n in element a_n-1... in element a_1 in the given json object. Returns Null if not found";
 JSONElement[json_, lst_List] := Fold[If[MemberQ[#1, #2 -> _], #2 /. #1, Null] &, json, lst]
 JSONElement[json_, s_String] := JSONElement[json, {s}]
 
@@ -121,32 +123,59 @@ BotPrepareKeyboard[strMatrix_] := "{\"keyboard\":" <> StringReplace[ExportString
 
 ProcessMessage::usage="ProcessMessage[msg, bot, BotCmdList] makes the bot automatically process a message with the rules given in BotCmdList.";
 ProcessMessage[msg_, bot_, BotCmdList_] :=
-    Block[ {txt, cmd, usrId, cmdEntry,cmdReturn,msg2},
+    Block[ {txt, cmd, usrId, cmdEntry, cmdReturn, msg2, msgText, location},
     	usrId = JSONElement[msg,{"message","from","id"}];
-    	(*If a command was not processed due to lack of arguments, append msg to buffered cmd*)
-        txt = GetPartialCommand[usrId,True] <> JSONElement[msg,{"message","text"}];
-        msg2=msg/.{("text" -> _) -> ("text" -> txt)};
-		BotLog["Answering command: "<> txt];
-        cmd = StringDrop[#, 1] & /@ 
-          StringCases[txt, StartOfString ~~ "/" ~~ ((WordCharacter | "_") ..), 1];
-        If[ Length[cmd] == 0,
-            BotErrorNoCmd[msg2,bot],
-            cmdEntry = 
-             Select[BotCmdList, ToLowerCase[#[[1]]] == ToLowerCase[cmd[[1]]] &];
-            If[ Length[cmdEntry] == 0,
-                BotErrorUnknownCmd[msg2, bot],
-                If[ BotUserPrivilege[usrId, bot] < cmdEntry[[1, 2]],
-                    BotErrorUnprivilegedCmd[msg2, bot],
-                    cmdReturn=cmdEntry[[1, 3]][msg2,bot];
-                    (*If first element of returned list is False, msg was not processed due to lack of arguments
-                     Note the processed msg2 may contain previously buffered arguments *)
-                    If[cmdReturn[[1]]===False,SavePartialCommand[msg2]];
-                    cmdReturn
-                    
-                ]
-            ]
-        ]
+    	msgText = JSONElement[msg,{"message","text"}];
+    	If[msgText===Null,
+    		(*Not a text message but some other info*)
+    		location = JSONElement[msg,{"message","location"}];
+    		If[Not[location===Null],
+    			BotLog["Processing location for user: "<> ToString[usrId]];
+    			BotProcessLocation[msg,bot];
+    			{True,Null},
+    			(*Another kind of info*)
+    			BotLog["Ignored unkown content from user: "<> ToString[usrId]];
+    			{True,Null}
+    		]
+    		,
+    		(*Text message*)
+    		(*If a command was not processed due to lack of arguments, append msg to buffered cmd*)
+	        txt = GetPartialCommand[usrId,True] <> msgText;
+	        msg2=msg/.{("text" -> _) -> ("text" -> txt)};
+			BotLog["Answering command: "<> txt];
+	        cmd = StringDrop[#, 1] & /@ 
+	          StringCases[txt, StartOfString ~~ "/" ~~ ((WordCharacter | "_") ..), 1];
+	        If[ Length[cmd] == 0,
+	            BotErrorNoCmd[msg2,bot],
+	            cmdEntry = 
+	             Select[BotCmdList, ToLowerCase[#[[1]]] == ToLowerCase[cmd[[1]]] &];
+	            If[ Length[cmdEntry] == 0,
+	                BotErrorUnknownCmd[msg2, bot],
+	                If[ BotUserPrivilege[usrId, bot] < cmdEntry[[1, 2]],
+	                    BotErrorUnprivilegedCmd[msg2, bot],
+	                    cmdReturn=cmdEntry[[1, 3]][msg2,bot];
+	                    (*If first element of returned list is False, msg was not processed due to lack of arguments
+	                     Note the processed msg2 may contain previously buffered arguments *)
+	                    If[cmdReturn[[1]]===False,SavePartialCommand[msg2]];
+	                    cmdReturn
+	                    
+	                ]
+	            ]
+	        ]
+    	]
+    	
     ]
+    
+BotUserLocation = {}
+    
+BotProcessLocation[msg_, bot_] :=
+	Block[{usrId, location},
+		usrId = JSONElement[msg,{"message","from","id"}];
+		location = JSONElement[msg,{"message","location"}];
+		If[MemberQ[BotUserLocation, usrId -> _],
+			BotUserLocation = BotUserLocation /. HoldPattern[usrId -> _] :> (usrId -> location), 
+			AppendTo[BotUserLocation, usrId -> location]]
+	]
 
 BotErrorNoCmd[msg_, bot_] := {True,BotAnswerMsg[msg,JSONElement[bot, "ErrorNoCmd"],bot]}
 

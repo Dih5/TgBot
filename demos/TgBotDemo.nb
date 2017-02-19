@@ -190,6 +190,9 @@ Cell[BoxData[
      ",", 
      RowBox[{"{", 
       RowBox[{"\"\<customkb\>\"", ",", " ", "0", ",", " ", "CmdCustomKb"}], 
+      "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"\"\<weather\>\"", ",", " ", "1", ",", " ", "CmdWeather"}], 
       "}"}]}], "}"}]}], ";"}]], "Input",
  InitializationCell->True],
 
@@ -594,6 +597,55 @@ Cell[BoxData[
     "  ", "]"}]}]], "Input",
  InitializationCell->True],
 
+Cell["\<\
+Use a previously given location to find weather data. When a user sends its \
+location, it is saved as a rule in BotUserLocation, which is read by the \
+command.\
+\>", "Text"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"CmdWeather", "[", 
+   RowBox[{"msg_", ",", "bot_"}], "]"}], " ", ":=", " ", "\n", " ", 
+  RowBox[{"Block", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"fromid", ",", "loc"}], "}"}], ",", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"fromid", " ", "=", " ", 
+      RowBox[{"JSONElement", "[", 
+       RowBox[{"msg", ",", 
+        RowBox[{"{", 
+         RowBox[{"\"\<message\>\"", ",", "\"\<from\>\"", ",", "\"\<id\>\""}], 
+         "}"}]}], "]"}]}], ";", "\[IndentingNewLine]", " ", 
+     RowBox[{"loc", " ", "=", " ", 
+      RowBox[{"JSONElement", "[", 
+       RowBox[{"BotUserLocation", ",", 
+        RowBox[{"{", "fromid", "}"}]}], "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"If", "[", 
+      RowBox[{
+       RowBox[{"loc", "===", "Null"}], ",", "\[IndentingNewLine]", 
+       RowBox[{"{", 
+        RowBox[{"True", ",", " ", 
+         RowBox[{"BotAnswerMsg", "[", 
+          RowBox[{
+          "msg", ",", " ", "\"\<First send me a location as attachment!\>\"", 
+           ",", "bot"}], "]"}]}], "}"}], ",", "\[IndentingNewLine]", 
+       RowBox[{"{", 
+        RowBox[{"True", ",", " ", 
+         RowBox[{"BotAnswerMsg", "[", 
+          RowBox[{"msg", ",", " ", 
+           RowBox[{"ToString", "[", 
+            RowBox[{"WeatherData", "[", 
+             RowBox[{
+              RowBox[{
+               RowBox[{"{", 
+                RowBox[{"\"\<latitude\>\"", ",", "\"\<longitude\>\""}], "}"}],
+                "/.", "loc"}], ",", "\"\<Temperature\>\""}], "]"}], "]"}], 
+           ",", "bot"}], "]"}]}], "}"}]}], "\[IndentingNewLine]", "]"}]}]}], 
+   "\n", "  ", "]"}]}]], "Input",
+ InitializationCell->True],
+
 Cell["UnixTime is not defined in 10.0-. Let\[CloseCurlyQuote]s add \
 compatibility:", "Text"],
 
@@ -664,8 +716,8 @@ Cell[BoxData[
   "]"}]], "Input"]
 }, Open  ]]
 },
-WindowSize->{1364, 685},
-WindowMargins->{{182, Automatic}, {Automatic, 130}},
+WindowSize->{1920, 1007},
+WindowMargins->{{186, Automatic}, {-129, 152}},
 PrivateNotebookOptions->{"FileOutlineCache"->False},
 TrackCellChangeTimes->False,
 FrontEndVersion->"11.0 for Linux x86 (64-bit) (September 21, 2016)",
