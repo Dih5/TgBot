@@ -83,8 +83,6 @@ relevant part of the bot description is the Token, which you ",
  "."
 }], "Text"],
 
-Cell[CellGroupData[{
-
 Cell[BoxData[
  RowBox[{"BotAPICall", "[", 
   RowBox[{"\"\<getUpdates\>\"", ",", 
@@ -92,19 +90,6 @@ Cell[BoxData[
    RowBox[{"{", 
     RowBox[{"\"\<Token\>\"", "\[Rule]", "\"\<PasteYourTokenHere\>\""}], 
     "}"}]}], "]"}]], "Input"],
-
-Cell[BoxData[
- TemplateBox[{
-  "FetchURL","httperr",
-   "\"The request to URL \
-\\!\\(\\*RowBox[{\\\"\\\\\\\"https://api.telegram.org/botPasteYourTokenHere/\
-getUpdates\\\\\\\"\\\"}]\\) was not successful. The server returned the HTTP \
-status code \\!\\(\\*RowBox[{\\\"\\\\\\\"404 (\\\\\\\\\\\\\\\"Not Found\\\\\\\
-\\\\\\\\\")\\\\\\\"\\\"}]\\).\"",2,6,5,30884572433622878929,"Local"},
-  "MessageTemplate"]], "Message", "MSG"],
-
-Cell[BoxData["$Failed"], "Output"]
-}, Open  ]],
 
 Cell["\<\
 If the call succeeded you will see an object returned by the call. The first \
@@ -155,10 +140,10 @@ Cell[BoxData[{
 }, Open  ]]
 },
 WindowSize->{1350, 685},
-WindowMargins->{{-8, Automatic}, {Automatic, 0}},
+WindowMargins->{{4, Automatic}, {Automatic, 22}},
 PrivateNotebookOptions->{"FileOutlineCache"->False},
 TrackCellChangeTimes->False,
-FrontEndVersion->"11.0 for Microsoft Windows (64-bit) (July 28, 2016)",
+FrontEndVersion->"11.0 for Linux x86 (64-bit) (September 21, 2016)",
 StyleDefinitions->"Default.nb"
 ]
 
