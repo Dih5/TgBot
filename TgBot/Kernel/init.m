@@ -1,3 +1,3 @@
 (* Mathematica Init File *)
 
-Get[ "tgbot`tgbot`"]
+Get[ "TgBot`TgBot`"]

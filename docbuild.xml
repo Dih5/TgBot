@@ -33,7 +33,7 @@
 	<property name="pacletName" value="TgBot"/>
 	<property name="app.name" value="TgBot"/>
 	<property name="pacletContainer" value="TgBot"/>
-	<property name="docInputDir" value="tgbot/Documentation"/>
+	<property name="docInputDir" value="TgBot/Documentation"/>
 	<property name="docOutputDir" value="Documentation"/>
 	<property name="dist" value="${basedir}/build" />
 	
