@@ -1,30 +1,32 @@
 BeginPackage["TgBot`"]
 
-BotUserPrivilege::usage="BotUserPrivilege[usrId, bot] returns 0 if usrId is not registered as friend, 1 if so, and 2 if admin.";
-BotAPICall::usage="BotAPICall[method, args, bot] makes the bot call a method with given parameters.";
-BotFileAPICall::usage="BotFileAPICall[method, args, filePath,fileField,bot] works like BotAPICall sending a file in filePath in the field named fileFields";
-BotAnswerMsg::usage="BotAnswerMsg[msg, txt, bot] makes the bot answer a given message with given text.";
-BotPhotoAnswerMsg::usage="BotPhotoAnswerMsg[msg, filePath, bot] makes the bot answer sending the photo in filePath.";
-BotAudioAnswerMsg::usage="BotAudioAnswerMsg[msg, filePath, bot] makes the bot answer sending the audio in filePath.";
+(*Basic API*)
+BotAPICall::usage="BotAPICall[method, args, bot] makes the bot call a method using the given parameters.";
+BotFileAPICall::usage="BotFileAPICall[method, args, filePath,fileField,bot] works like BotAPICall sending a file loaded from filePath as a parameter of name fileField.";
+BotStart::usage="BotStart[pollTime, bot, botCmdList] starts a bot with the typical command/answer cycle. The commands are given by botCmdList, and updates being check every pollTime.";
 
+(*Overridable methods*)
+BotErrorNoCmd::usage="BotErrorNoCmd[msg, bot] is called by BotStart to answer a non-command message. Override if needed.";
+BotErrorUnknownCmd::usage="BotErrorUnknownCmd[msg, bot] is called by BotStart to answer an unknown command message. Override if needed.";
+BotErrorUnprivilegedCmd::usage="BotErrorUnprivilegedCmd[msg, bot] is called by BotStart to answer a command message beyond the user's privilege. Override if needed.";
+BotLog::usage="BotLog[string] is called by BotStart to register events for debug purposes. By default calls Print. Override if needed.";
+
+(*Convenient wrappers*)
+BotAnswerMsg::usage="BotAnswerMsg[msg, txt, bot] makes the bot answer the given message with the given text.";
+BotPhotoAnswerMsg::usage="BotPhotoAnswerMsg[msg, filePath, bot] makes the bot answer the given message sending the photo in filePath.";
+BotAudioAnswerMsg::usage="BotAudioAnswerMsg[msg, filePath, bot] makes the bot answer the given message sending the audio in filePath.";
+
+(*Useful tools*)
 BotPrepareKeyboard::usage="BotPrepareKeyboard[strMatrix], where strMatrix is a 2D matrix of strings, prepares the serialized object representing a custom keyboard";
+BotUserPrivilege::usage="BotUserPrivilege[usrId, bot] returns 0 if usrId is not registered as friend, 1 if so, and 2 if admin.";
 
-BotErrorNoCmd::usage="BotErrorNoCmd[msg, bot] is called by ProcessMessage to answer a non-command message. Override if needed.";
-BotErrorUnknownCmd::usage="BotErrorUnknownCmd[msg, bot] is called by ProcessMessage to answer an unknown command message. Override if needed.";
-BotErrorUnprivilegedCmd::usage="BotErrorUnprivilegedCmd[msg, bot] is called by ProcessMessage to answer a command message beyond the user's privilege. Override if needed.";
-
-BotLog::usage="BotLog[string] is called to register events for debug purposes. By default calls Print. Override at will.";
-
-BotStart::usage="BotStart[pollTime, bot, BotCmdList] starts a bot with given command, polling updates in given time.";
-
-JSONElement::usage="JSONElement[json, {a_1,a_2,...,a_n}] gets the element a_n in element a_n-1... in element a_1 in the given json object.";
 
 Begin["`Private`"]
 (* Implementation of the package *)
 
 $CharacterEncoding = "UTF-8";
 
-
+JSONElement::usage="JSONElement[json, {a_1,a_2,...,a_n}] gets the element a_n in element a_n-1... in element a_1 in the given json object.";
 (*TODO: Handle errors*)
 JSONElement[json_, lst_List] := Fold[#2 /. #1 &, json, lst]
 JSONElement[json_, s_String] := s /. json
